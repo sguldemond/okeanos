@@ -6,7 +6,7 @@ This is a fork of [`node-zephyros`](https://github.com/danielepolencic/node-zeph
 ## Usage
 Include `okeanos` in your script and you're ready to go!
 
-```node
+```coffeescript
 Okeanos = require 'okeanos'
 
 $ = new Okeanos()
@@ -24,7 +24,7 @@ $.bind('h', ['Cmd', 'Shift']).then ->
 Listen to a particular key combination and fire the chain every time such
 shortcut is triggered.
 
-```node
+```coffeescript
 $.bind('t', ['Cmd', 'Shift']).then ->
   console.log 'Hey, you pressed t+⌘⌃'
 ```
@@ -34,7 +34,7 @@ $.bind('t', ['Cmd', 'Shift']).then ->
 Listen to a particular event and fire the chain every time this event occurs.
 A comprehensive list of events is available [here](https://github.com/sdegutis/zephyros/blob/master/Docs/Protocol.md)
 
-```node
+```coffeescript
 $.listen('window_created').then ->
   console.log 'Hey, you created a new window!'
 ```
@@ -43,7 +43,7 @@ $.listen('window_created').then ->
 
 This helps a lot with callback hell.
 
-```node
+```coffeescript
 $.window.active().then (window) ->
   window.getTitle().then (title) ->
     window.getFrame().then (frame) ->
@@ -53,7 +53,7 @@ $.window.active().then (window) ->
 
 You can use it by requesting all the info at the same time via `model.preload()`.
 
-```node
+```coffeescript
 $.window.active().then (window) ->
   window.preload('title', 'frame', 'screen').then ->
     console.log window.title, window.frame, window.screen
@@ -61,7 +61,7 @@ $.window.active().then (window) ->
 
 Even better is that you can use preloading directly on `okeanos.window.*`, `okeanos.screen.*` and `okeanos.app.*` methods.
 
-```node
+```coffeescript
 $.window.active('title', 'frame', 'screen').then (window) ->
   console.log window.title, window.frame, window.screen
 ```
@@ -73,7 +73,7 @@ $.window.active('title', 'frame', 'screen').then (window) ->
 **active**
 Return a window object with the `id` of the focused window.
 
-```node
+```coffeescript
 $.window.active().then (window) ->
   console.log window.id
 ```
@@ -81,7 +81,7 @@ $.window.active().then (window) ->
 **visible**
 Return an array containing a window object for each visible window.
 
-```node
+```coffeescript
 $.window.visible().then (windows) ->
   for window in windows
     console.log window.id
@@ -90,7 +90,7 @@ $.window.visible().then (windows) ->
 **all**
 Return an array containing a window object for all the windows.
 
-```node
+```coffeescript
 $.window.all().then (windows) ->
   for window in windows
     console.log window.id
@@ -102,7 +102,7 @@ $.window.all().then (windows) ->
 
 Returns the window title as a string. Cached as `window.title`.
 
-```node
+```coffeescript
 $.window.active().then (window) ->
   window.getTitle().then (title) ->
     console.log title
@@ -112,7 +112,7 @@ $.window.active().then (window) ->
 
 Returns the screen that the windows is in as a new Screen object. Cached as `window.screen`.
 
-```node
+```coffeescript
 $.window.active().then (window) ->
   window.getScreen().then (screen) ->
     console.log screen.id
@@ -122,7 +122,7 @@ $.window.active().then (window) ->
 
 Returns the app that created the window as a new App object. Cached as `window.app`.
 
-```node
+```coffeescript
 $.window.active().then (window) ->
   window.getApp().then (app) ->
     console.log app.id
@@ -132,7 +132,7 @@ $.window.active().then (window) ->
 
 Return the coordinates for the window frame in the format {x, y, w, h}. Cached as `window.frame`.
 
-```node
+```coffeescript
 $.window.active().then (window) ->
   window.getFrame().then (frame) ->
     console.log frame
@@ -142,7 +142,7 @@ $.window.active().then (window) ->
 
 Set the window frame.
 
-```node
+```coffeescript
 $.window.active().then (window) ->
   window.getFrame().then (frame) ->
     window.setFrame
@@ -156,7 +156,7 @@ $.window.active().then (window) ->
 
 Return the size of the window as { w: width, h: height }.
 
-```node
+```coffeescript
 $.window.active().then (window) ->
   window.getSize().then (size) ->
     console.log 'width:', size.w,
@@ -167,7 +167,7 @@ $.window.active().then (window) ->
 
 Set the width and height of the window frame.
 
-```node
+```coffeescript
 $.window.active().then (window) ->
   window.setSize
     w: 200
@@ -178,7 +178,7 @@ $.window.active().then (window) ->
 
 Resize the window by adding onto the current size.
 
-```node
+```coffeescript
 $.window.active().then (window) ->
   window.resize
     w: -100
@@ -202,7 +202,7 @@ Set the position of the top left corner of the window relative to it's current p
 
 Maximize the window.
 
-```node
+```coffeescript
 $.window.active().then (window) ->
   window.maximize()
 ```
@@ -211,7 +211,7 @@ $.window.active().then (window) ->
 
 Minimize the window.
 
-```node
+```coffeescript
 $.window.active().then (window) ->
   window.minimize()
 ```
@@ -220,7 +220,7 @@ $.window.active().then (window) ->
 
 Unminimize the window.
 
-```node
+```coffeescript
 $.window.active().then (window) ->
   window.unminimize()
 ```
@@ -233,7 +233,7 @@ Focus the current window.
 
 Move the focus from this window to the specified direction.
 
-```node
+```coffeescript
 $.window.active().then (window) ->
   window.focusTo 'right'
 ```
@@ -243,7 +243,7 @@ $.window.active().then (window) ->
 Return an array of window objects for windows located on the {north, south,
 east, west} of this window.
 
-```node
+```coffeescript
 $.window.active().then (window) ->
   window.getWindowsTo('north').then (windows) ->
     for window in windows
@@ -309,7 +309,7 @@ Rotate the display.
 
 Return an array of all the running applications.
 
-```node
+```coffeescript
 $.app.all('title').then (apps) ->
   for app in apps
     console.log app.title
@@ -321,7 +321,7 @@ $.app.all('title').then (apps) ->
 
 Get all the windows created by this application. Cached as `app.all`.
 
-```node
+```coffeescript
 $.window.active('app').then (window) ->
   window.app.allWindows().then (windows) ->
     console.log windows
@@ -363,7 +363,7 @@ Kill9 the application.
 
 Return a string with the content of the clipboard
 
-```node
+```coffeescript
 $.util.clipboard().then (clipboard) ->
   console.log clipboard
 ```
@@ -372,7 +372,7 @@ $.util.clipboard().then (clipboard) ->
 
 Trigger an update for Zephyros settings.
 
-```node
+```coffeescript
 $.util.updateSettings()
 ```
 
@@ -380,7 +380,7 @@ $.util.updateSettings()
 
 Force a reload of the config file.
 
-```node
+```coffeescript
 $.util.relaunch()
 ```
 
@@ -388,7 +388,7 @@ $.util.relaunch()
 
 Prompt an alter.
 
-```node
+```coffeescript
 $.util.alert 'hello world'    # show for 1 second
 $.util.alert 'hello world', 5 # show for 5 seconds
 $.util.alert
@@ -400,7 +400,7 @@ $.util.alert
 
 Log a string.
 
-```node
+```coffeescript
 $.util.log 'hello world'
 ```
 
@@ -408,7 +408,7 @@ $.util.log 'hello world'
 
 Choose a list of items from a dynamically populated popup.
 
-```node
+```coffeescript
 $.util.chooseFrom(
   list: ['Banana', 'Pineapple', 'Orange']
   title: 'Fruits'
@@ -422,7 +422,7 @@ $.util.chooseFrom(
 
 Undo the last action.
 
-```node
+```coffeescript
 $.window.active().then (window) ->
   window.maximise()
   $.util.undo()
@@ -433,7 +433,7 @@ $.window.active().then (window) ->
 
 Redo the last action.
 
-```node
+```coffeescript
 $.window.active().then (window) ->
   window.maximise()
   $.util.undo()
