@@ -33,26 +33,22 @@
 
 <p>Node.js adapter for <a href="https://github.com/sdegutis/zephyros">Zephyros</a> - the OS X window manager for hackers.</p>
 
-<p><img src="http://i.imgur.com/bXDlfH0.gif" alt="Zephyros Demo"></p>
-
-<p>This is a fork of <a href="https://github.com/danielepolencic/node-zephyros"><code>node-zephyros</code></a> by <a href="https://github.com/danielepolencic">danielepolencic</a>. The main difference is that this uses a class based API where the original used a chaining system.</p>
-
-<p>This allows for more control over Zephyros but has a lot more callbacks.</p>
+<p>This is a fork of <a href="https://github.com/danielepolencic/node-zephyros"><code>node-zephyros</code></a> by <a href="https://github.com/danielepolencic">danielepolencic</a>. The main difference is that this uses a class based API where the original used a chaining system. Okeanos gives you a lot of control over objects.</p>
 
 <h2>
 <a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
 
-<p>Include <code>zephyros</code> in your script and you're ready to go!</p>
+<p>Include <code>okeanos</code> in your script and you're ready to go!</p>
 
-<pre lang="node"><code>Zephyros = require('zephyros')
+<div class="highlight highlight-coffeescript"><pre><span class="nv">Okeanos = </span><span class="nx">require</span> <span class="s">'okeanos'</span>
 
-z = new Zephyros()
+<span class="nv">$ = </span><span class="k">new</span> <span class="nx">Okeanos</span><span class="p">()</span>
 
-z.bind('h', ['Cmd', 'Shift']).then -&gt;
-  z.window.active().then (window) -&gt;
-    window.nudge -100, 0
+<span class="nx">$</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s">'h'</span><span class="p">,</span> <span class="p">[</span><span class="s">'Cmd'</span><span class="p">,</span> <span class="s">'Shift'</span><span class="p">]).</span><span class="nx">then</span> <span class="nf">-&gt;</span>
+  <span class="nx">$</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">active</span><span class="p">().</span><span class="nx">then</span> <span class="nf">(window) -&gt;</span>
+    <span class="nb">window</span><span class="p">.</span><span class="nx">nudge</span> <span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">0</span>
 
-</code></pre>
+</pre></div>
 
 <h2>
 <a name="react-to-events" class="anchor" href="#react-to-events"><span class="octicon octicon-link"></span></a>React to events</h2>
@@ -62,43 +58,43 @@ z.bind('h', ['Cmd', 'Shift']).then -&gt;
 Listen to a particular key combination and fire the chain every time such
 shortcut is triggered.</p>
 
-<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift']).then -&gt;
-  console.log 'Hey, you pressed t+⌘⌃'
-</code></pre>
+<div class="highlight highlight-coffeescript"><pre><span class="nx">$</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s">'t'</span><span class="p">,</span> <span class="p">[</span><span class="s">'Cmd'</span><span class="p">,</span> <span class="s">'Shift'</span><span class="p">]).</span><span class="nx">then</span> <span class="nf">-&gt;</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">'Hey, you pressed t+⌘⌃'</span>
+</pre></div>
 
 <p><strong>listen</strong>
 <code>listen( event&lt;String&gt; )</code>
 Listen to a particular event and fire the chain every time this event occurs.
 A comprehensive list of events is available <a href="https://github.com/sdegutis/zephyros/blob/master/Docs/Protocol.md">here</a></p>
 
-<pre lang="node"><code>z.listen('window_created').then -&gt;
-  console.log 'Hey, you created a new window!'
-</code></pre>
+<div class="highlight highlight-coffeescript"><pre><span class="nx">$</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="s">'window_created'</span><span class="p">).</span><span class="nx">then</span> <span class="nf">-&gt;</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">'Hey, you created a new window!'</span>
+</pre></div>
 
 <h2>
 <a name="preloading" class="anchor" href="#preloading"><span class="octicon octicon-link"></span></a>Preloading</h2>
 
 <p>This helps a lot with callback hell.</p>
 
-<pre lang="node"><code>z.window.active().then (window) -&gt;
-  window.getTitle().then (title) -&gt;
-    window.getFrame().then (frame) -&gt;
-      window.getScreen().then (screen) -&gt;
-        console.log title, frame, screen
-</code></pre>
+<div class="highlight highlight-coffeescript"><pre><span class="nx">$</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">active</span><span class="p">().</span><span class="nx">then</span> <span class="nf">(window) -&gt;</span>
+  <span class="nb">window</span><span class="p">.</span><span class="nx">getTitle</span><span class="p">().</span><span class="nx">then</span> <span class="nf">(title) -&gt;</span>
+    <span class="nb">window</span><span class="p">.</span><span class="nx">getFrame</span><span class="p">().</span><span class="nx">then</span> <span class="nf">(frame) -&gt;</span>
+      <span class="nb">window</span><span class="p">.</span><span class="nx">getScreen</span><span class="p">().</span><span class="nx">then</span> <span class="nf">(screen) -&gt;</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">title</span><span class="p">,</span> <span class="nx">frame</span><span class="p">,</span> <span class="nx">screen</span>
+</pre></div>
 
 <p>You can use it by requesting all the info at the same time via <code>model.preload()</code>.</p>
 
-<pre lang="node"><code>z.window.active().then (window) -&gt;
-  window.preload('title', 'frame', 'screen').then -&gt;
-    console.log window.title, window.frame, window.screen
-</code></pre>
+<div class="highlight highlight-coffeescript"><pre><span class="nx">$</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">active</span><span class="p">().</span><span class="nx">then</span> <span class="nf">(window) -&gt;</span>
+  <span class="nb">window</span><span class="p">.</span><span class="nx">preload</span><span class="p">(</span><span class="s">'title'</span><span class="p">,</span> <span class="s">'frame'</span><span class="p">,</span> <span class="s">'screen'</span><span class="p">).</span><span class="nx">then</span> <span class="nf">-&gt;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nb">window</span><span class="p">.</span><span class="nx">title</span><span class="p">,</span> <span class="nb">window</span><span class="p">.</span><span class="nx">frame</span><span class="p">,</span> <span class="nb">window</span><span class="p">.</span><span class="nx">screen</span>
+</pre></div>
 
-<p>Even better is that you can use preloading directly on <code>z.window.*</code>, <code>z.screen.*</code> and <code>z.app.*</code> methods.</p>
+<p>Even better is that you can use preloading directly on <code>okeanos.window.*</code>, <code>okeanos.screen.*</code> and <code>okeanos.app.*</code> methods.</p>
 
-<pre lang="node"><code>z.window.active('title', 'frame', 'screen').then (window) -&gt;
-  console.log window.title, window.frame, window.screen
-</code></pre>
+<div class="highlight highlight-coffeescript"><pre><span class="nx">$</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">active</span><span class="p">(</span><span class="s">'title'</span><span class="p">,</span> <span class="s">'frame'</span><span class="p">,</span> <span class="s">'screen'</span><span class="p">).</span><span class="nx">then</span> <span class="nf">(window) -&gt;</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nb">window</span><span class="p">.</span><span class="nx">title</span><span class="p">,</span> <span class="nb">window</span><span class="p">.</span><span class="nx">frame</span><span class="p">,</span> <span class="nb">window</span><span class="p">.</span><span class="nx">screen</span>
+</pre></div>
 
 <h2>
 <a name="window" class="anchor" href="#window"><span class="octicon octicon-link"></span></a>Window</h2>
@@ -109,25 +105,25 @@ A comprehensive list of events is available <a href="https://github.com/sdegutis
 <p><strong>active</strong>
 Return a window object with the <code>id</code> of the focused window.</p>
 
-<pre lang="node"><code>z.window.active().then (window) -&gt;
-  console.log window.id
-</code></pre>
+<div class="highlight highlight-coffeescript"><pre><span class="nx">$</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">active</span><span class="p">().</span><span class="nx">then</span> <span class="nf">(window) -&gt;</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nb">window</span><span class="p">.</span><span class="nx">id</span>
+</pre></div>
 
 <p><strong>visible</strong>
 Return an array containing a window object for each visible window.</p>
 
-<pre lang="node"><code>z.window.visible().then (windows) -&gt;
-  for window in windows
-    console.log window.id
-</code></pre>
+<div class="highlight highlight-coffeescript"><pre><span class="nx">$</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">visible</span><span class="p">().</span><span class="nx">then</span> <span class="nf">(windows) -&gt;</span>
+  <span class="k">for</span> <span class="nb">window</span> <span class="k">in</span> <span class="nx">windows</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nb">window</span><span class="p">.</span><span class="nx">id</span>
+</pre></div>
 
 <p><strong>all</strong>
 Return an array containing a window object for all the windows.</p>
 
-<pre lang="node"><code>z.window.all().then (windows) -&gt;
-  for window in windows
-    console.log window.id
-</code></pre>
+<div class="highlight highlight-coffeescript"><pre><span class="nx">$</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">all</span><span class="p">().</span><span class="nx">then</span> <span class="nf">(windows) -&gt;</span>
+  <span class="k">for</span> <span class="nb">window</span> <span class="k">in</span> <span class="nx">windows</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nb">window</span><span class="p">.</span><span class="nx">id</span>
+</pre></div>
 
 <h3>
 <a name="class" class="anchor" href="#class"><span class="octicon octicon-link"></span></a>Class</h3>
@@ -136,81 +132,81 @@ Return an array containing a window object for all the windows.</p>
 
 <p>Returns the window title as a string. Cached as <code>window.title</code>.</p>
 
-<pre lang="node"><code>z.window.active().then (window) -&gt;
-  window.getTitle().then (title) -&gt;
-    console.log title
-</code></pre>
+<div class="highlight highlight-coffeescript"><pre><span class="nx">$</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">active</span><span class="p">().</span><span class="nx">then</span> <span class="nf">(window) -&gt;</span>
+  <span class="nb">window</span><span class="p">.</span><span class="nx">getTitle</span><span class="p">().</span><span class="nx">then</span> <span class="nf">(title) -&gt;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">title</span>
+</pre></div>
 
 <p><strong>getScreen()</strong></p>
 
 <p>Returns the screen that the windows is in as a new Screen object. Cached as <code>window.screen</code>.</p>
 
-<pre lang="node"><code>z.window.active().then (window) -&gt;
-  window.getScreen().then (screen) -&gt;
-    console.log screen.id
-</code></pre>
+<div class="highlight highlight-coffeescript"><pre><span class="nx">$</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">active</span><span class="p">().</span><span class="nx">then</span> <span class="nf">(window) -&gt;</span>
+  <span class="nb">window</span><span class="p">.</span><span class="nx">getScreen</span><span class="p">().</span><span class="nx">then</span> <span class="nf">(screen) -&gt;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">screen</span><span class="p">.</span><span class="nx">id</span>
+</pre></div>
 
 <p><strong>getApp()</strong></p>
 
 <p>Returns the app that created the window as a new App object. Cached as <code>window.app</code>.</p>
 
-<pre lang="node"><code>z.window.active().then (window) -&gt;
-  window.getApp().then (app) -&gt;
-    console.log app.id
-</code></pre>
+<div class="highlight highlight-coffeescript"><pre><span class="nx">$</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">active</span><span class="p">().</span><span class="nx">then</span> <span class="nf">(window) -&gt;</span>
+  <span class="nb">window</span><span class="p">.</span><span class="nx">getApp</span><span class="p">().</span><span class="nx">then</span> <span class="nf">(app) -&gt;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">app</span><span class="p">.</span><span class="nx">id</span>
+</pre></div>
 
 <p><strong>getFrame()</strong></p>
 
 <p>Return the coordinates for the window frame in the format {x, y, w, h}. Cached as <code>window.frame</code>.</p>
 
-<pre lang="node"><code>z.window.active().then (window) -&gt;
-  window.getFrame().then (frame) -&gt;
-    console.log frame
-</code></pre>
+<div class="highlight highlight-coffeescript"><pre><span class="nx">$</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">active</span><span class="p">().</span><span class="nx">then</span> <span class="nf">(window) -&gt;</span>
+  <span class="nb">window</span><span class="p">.</span><span class="nx">getFrame</span><span class="p">().</span><span class="nx">then</span> <span class="nf">(frame) -&gt;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">frame</span>
+</pre></div>
 
 <p><strong>setFrame( {x, y, w, h} OR x, y, w, h )</strong></p>
 
 <p>Set the window frame.</p>
 
-<pre lang="node"><code>z.window.active().then (window) -&gt;
-  window.getFrame().then (frame) -&gt;
-    window.setFrame
-      x: frame.x / 2
-      y: frame.y / 2
-      w: frame.w * 2
-      h: frame.h * 2
-</code></pre>
+<div class="highlight highlight-coffeescript"><pre><span class="nx">$</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">active</span><span class="p">().</span><span class="nx">then</span> <span class="nf">(window) -&gt;</span>
+  <span class="nb">window</span><span class="p">.</span><span class="nx">getFrame</span><span class="p">().</span><span class="nx">then</span> <span class="nf">(frame) -&gt;</span>
+    <span class="nb">window</span><span class="p">.</span><span class="nx">setFrame</span>
+      <span class="nv">x: </span><span class="nx">frame</span><span class="p">.</span><span class="nx">x</span> <span class="o">/</span> <span class="mi">2</span>
+      <span class="nv">y: </span><span class="nx">frame</span><span class="p">.</span><span class="nx">y</span> <span class="o">/</span> <span class="mi">2</span>
+      <span class="nv">w: </span><span class="nx">frame</span><span class="p">.</span><span class="nx">w</span> <span class="o">*</span> <span class="mi">2</span>
+      <span class="nv">h: </span><span class="nx">frame</span><span class="p">.</span><span class="nx">h</span> <span class="o">*</span> <span class="mi">2</span>
+</pre></div>
 
 <p><strong>getSize()</strong></p>
 
 <p>Return the size of the window as { w: width, h: height }.</p>
 
-<pre lang="node"><code>z.window.active().then (window) -&gt;
-  window.getSize().then (size) -&gt;
-    console.log 'width:', size.w,
-    console.log 'height:', size.h
-</code></pre>
+<div class="highlight highlight-coffeescript"><pre><span class="nx">$</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">active</span><span class="p">().</span><span class="nx">then</span> <span class="nf">(window) -&gt;</span>
+  <span class="nb">window</span><span class="p">.</span><span class="nx">getSize</span><span class="p">().</span><span class="nx">then</span> <span class="nf">(size) -&gt;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">'width:'</span><span class="p">,</span> <span class="nx">size</span><span class="p">.</span><span class="nx">w</span><span class="p">,</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">'height:'</span><span class="p">,</span> <span class="nx">size</span><span class="p">.</span><span class="nx">h</span>
+</pre></div>
 
 <p><strong>setSize( {w, h} OR w, h )</strong></p>
 
 <p>Set the width and height of the window frame.</p>
 
-<pre lang="node"><code>z.window.active().then (window) -&gt;
-  window.setSize
-    w: 200
-    h: 300
-</code></pre>
+<div class="highlight highlight-coffeescript"><pre><span class="nx">$</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">active</span><span class="p">().</span><span class="nx">then</span> <span class="nf">(window) -&gt;</span>
+  <span class="nb">window</span><span class="p">.</span><span class="nx">setSize</span>
+    <span class="nv">w: </span><span class="mi">200</span>
+    <span class="nv">h: </span><span class="mi">300</span>
+</pre></div>
 
 <p><strong>resize( w, h )</strong></p>
 
 <p>Resize the window by adding onto the current size.</p>
 
-<pre lang="node"><code>z.window.active().then (window) -&gt;
-  window.resize
-    w: -100
-    h: 200
-  # will shrink the width by 100px and add 200px to the height
-</code></pre>
+<div class="highlight highlight-coffeescript"><pre><span class="nx">$</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">active</span><span class="p">().</span><span class="nx">then</span> <span class="nf">(window) -&gt;</span>
+  <span class="nb">window</span><span class="p">.</span><span class="nx">resize</span>
+    <span class="nv">w: </span><span class="o">-</span><span class="mi">100</span>
+    <span class="nv">h: </span><span class="mi">200</span>
+  <span class="c1"># will shrink the width by 100px and add 200px to the height</span>
+</pre></div>
 
 <p><strong>getPosition()</strong></p>
 
@@ -228,25 +224,25 @@ Return an array containing a window object for all the windows.</p>
 
 <p>Maximize the window.</p>
 
-<pre lang="node"><code>z.window.active().then (window) -&gt;
-  window.maximize()
-</code></pre>
+<div class="highlight highlight-coffeescript"><pre><span class="nx">$</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">active</span><span class="p">().</span><span class="nx">then</span> <span class="nf">(window) -&gt;</span>
+  <span class="nb">window</span><span class="p">.</span><span class="nx">maximize</span><span class="p">()</span>
+</pre></div>
 
 <p><strong>minimize()</strong></p>
 
 <p>Minimize the window.</p>
 
-<pre lang="node"><code>z.window.active().then (window) -&gt;
-  window.minimize()
-</code></pre>
+<div class="highlight highlight-coffeescript"><pre><span class="nx">$</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">active</span><span class="p">().</span><span class="nx">then</span> <span class="nf">(window) -&gt;</span>
+  <span class="nb">window</span><span class="p">.</span><span class="nx">minimize</span><span class="p">()</span>
+</pre></div>
 
 <p><strong>unminimize()</strong></p>
 
 <p>Unminimize the window.</p>
 
-<pre lang="node"><code>z.window.active().then (window) -&gt;
-  window.unminimize()
-</code></pre>
+<div class="highlight highlight-coffeescript"><pre><span class="nx">$</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">active</span><span class="p">().</span><span class="nx">then</span> <span class="nf">(window) -&gt;</span>
+  <span class="nb">window</span><span class="p">.</span><span class="nx">unminimize</span><span class="p">()</span>
+</pre></div>
 
 <p><strong>focus()</strong></p>
 
@@ -256,24 +252,28 @@ Return an array containing a window object for all the windows.</p>
 
 <p>Move the focus from this window to the specified direction.</p>
 
-<pre lang="node"><code>z.window.active().then (window) -&gt;
-  window.focusTo 'right'
-</code></pre>
+<div class="highlight highlight-coffeescript"><pre><span class="nx">$</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">active</span><span class="p">().</span><span class="nx">then</span> <span class="nf">(window) -&gt;</span>
+  <span class="nb">window</span><span class="p">.</span><span class="nx">focusTo</span> <span class="s">'right'</span>
+</pre></div>
 
 <p><strong>getWindowsTo( ['north', 'south', 'east', 'west'] )</strong></p>
 
 <p>Return an array of window objects for windows located on the {north, south,
 east, west} of this window.</p>
 
-<pre lang="node"><code>z.window.active().then (window) -&gt;
-  window.getWindowsTo('north').then (windows) -&gt;
-    for window in windows
-      console.log window.id
-</code></pre>
+<div class="highlight highlight-coffeescript"><pre><span class="nx">$</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">active</span><span class="p">().</span><span class="nx">then</span> <span class="nf">(window) -&gt;</span>
+  <span class="nb">window</span><span class="p">.</span><span class="nx">getWindowsTo</span><span class="p">(</span><span class="s">'north'</span><span class="p">).</span><span class="nx">then</span> <span class="nf">(windows) -&gt;</span>
+    <span class="k">for</span> <span class="nb">window</span> <span class="k">in</span> <span class="nx">windows</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nb">window</span><span class="p">.</span><span class="nx">id</span>
+</pre></div>
 
-<p><strong>getOtherWindows( {all: yes/no } )</strong></p>
+<p><strong>getOtherWindows()</strong></p>
 
-<p>Get an array of all the other windows on the same screen. If <code>all</code> is true, then it will return all the windows on all the screens.</p>
+<p>Get an array of all the other windows on the same screen. Cached as <code>allOtherWindows</code>.</p>
+
+<p><strong>getAllOtherWindows()</strong></p>
+
+<p>Get an array of all the other windows on all the screens. Cached as <code>allOtherWindows</code>.</p>
 
 <p><strong>isNormal()</strong></p>
 
@@ -330,10 +330,10 @@ east, west} of this window.</p>
 
 <p>Return an array of all the running applications.</p>
 
-<pre lang="node"><code>z.app.all('title').then (apps) -&gt;
-  for app in apps
-    console.log app.title
-</code></pre>
+<div class="highlight highlight-coffeescript"><pre><span class="nx">$</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">all</span><span class="p">(</span><span class="s">'title'</span><span class="p">).</span><span class="nx">then</span> <span class="nf">(apps) -&gt;</span>
+  <span class="k">for</span> <span class="nx">app</span> <span class="k">in</span> <span class="nx">apps</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">app</span><span class="p">.</span><span class="nx">title</span>
+</pre></div>
 
 <h3>
 <a name="class-2" class="anchor" href="#class-2"><span class="octicon octicon-link"></span></a>Class</h3>
@@ -341,6 +341,11 @@ east, west} of this window.</p>
 <p><strong>allWindows()</strong></p>
 
 <p>Get all the windows created by this application. Cached as <code>app.all</code>.</p>
+
+<div class="highlight highlight-coffeescript"><pre><span class="nx">$</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">active</span><span class="p">(</span><span class="s">'app'</span><span class="p">).</span><span class="nx">then</span> <span class="nf">(window) -&gt;</span>
+  <span class="nb">window</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">allWindows</span><span class="p">().</span><span class="nx">then</span> <span class="nf">(windows) -&gt;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">windows</span>
+</pre></div>
 
 <p><strong>visibleWindows()</strong></p>
 
@@ -380,74 +385,74 @@ east, west} of this window.</p>
 
 <p>Return a string with the content of the clipboard</p>
 
-<pre lang="node"><code>z.util.clipboard().then (clipboard) -&gt;
-  console.log clipboard
-</code></pre>
+<div class="highlight highlight-coffeescript"><pre><span class="nx">$</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">clipboard</span><span class="p">().</span><span class="nx">then</span> <span class="nf">(clipboard) -&gt;</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">clipboard</span>
+</pre></div>
 
 <p><strong>updateSettings()</strong></p>
 
 <p>Trigger an update for Zephyros settings.</p>
 
-<pre lang="node"><code>z.util.updateSettings()
-</code></pre>
+<div class="highlight highlight-coffeescript"><pre><span class="nx">$</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">updateSettings</span><span class="p">()</span>
+</pre></div>
 
 <p><strong>relaunch()</strong></p>
 
 <p>Force a reload of the config file.</p>
 
-<pre lang="node"><code>z.util.relaunch()
-</code></pre>
+<div class="highlight highlight-coffeescript"><pre><span class="nx">$</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">relaunch</span><span class="p">()</span>
+</pre></div>
 
 <p><strong>alert( message, [duration = 1] )</strong></p>
 
 <p>Prompt an alter.</p>
 
-<pre lang="node"><code>z.util.alert 'hello world'    # show for 1 second
-z.util.alert 'hello world', 5 # show for 5 seconds
-z.util.alert
-  message: 'hello world'
-  duration: 5
-</code></pre>
+<div class="highlight highlight-coffeescript"><pre><span class="nx">$</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">alert</span> <span class="s">'hello world'</span>    <span class="c1"># show for 1 second</span>
+<span class="nx">$</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">alert</span> <span class="s">'hello world'</span><span class="p">,</span> <span class="mi">5</span> <span class="c1"># show for 5 seconds</span>
+<span class="nx">$</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">alert</span>
+  <span class="nv">message: </span><span class="s">'hello world'</span>
+  <span class="nv">duration: </span><span class="mi">5</span>
+</pre></div>
 
 <p><strong>log( message )</strong></p>
 
 <p>Log a string.</p>
 
-<pre lang="node"><code>z.util.log 'hello world'
-</code></pre>
+<div class="highlight highlight-coffeescript"><pre><span class="nx">$</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">log</span> <span class="s">'hello world'</span>
+</pre></div>
 
 <p><strong>chooseFrom( list, title, width, height )</strong></p>
 
 <p>Choose a list of items from a dynamically populated popup.</p>
 
-<pre lang="node"><code>z.util.chooseFrom(
-  list: ['Banana', 'Pineapple', 'Orange']
-  title: 'Fruits'
-  height: 10
-  width: 30
-).then (selected) -&gt;
-  console.log selected # index of the array
-</code></pre>
+<div class="highlight highlight-coffeescript"><pre><span class="nx">$</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">chooseFrom</span><span class="p">(</span>
+  <span class="nv">list: </span><span class="p">[</span><span class="s">'Banana'</span><span class="p">,</span> <span class="s">'Pineapple'</span><span class="p">,</span> <span class="s">'Orange'</span><span class="p">]</span>
+  <span class="nv">title: </span><span class="s">'Fruits'</span>
+  <span class="nv">height: </span><span class="mi">10</span>
+  <span class="nv">width: </span><span class="mi">30</span>
+<span class="p">).</span><span class="nx">then</span> <span class="nf">(selected) -&gt;</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">selected</span> <span class="c1"># index of the array</span>
+</pre></div>
 
 <p><strong>undo()</strong></p>
 
 <p>Undo the last action.</p>
 
-<pre lang="node"><code>z.window.active().then (window) -&gt;
-  window.maximise()
-  z.util.undo()
-  z.util.redo()
-</code></pre>
+<div class="highlight highlight-coffeescript"><pre><span class="nx">$</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">active</span><span class="p">().</span><span class="nx">then</span> <span class="nf">(window) -&gt;</span>
+  <span class="nb">window</span><span class="p">.</span><span class="nx">maximise</span><span class="p">()</span>
+  <span class="nx">$</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">undo</span><span class="p">()</span>
+  <span class="nx">$</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">redo</span><span class="p">()</span>
+</pre></div>
 
 <p><strong>redo()</strong></p>
 
 <p>Redo the last action.</p>
 
-<pre lang="node"><code>z.window.active().then (window) -&gt;
-  window.maximise()
-  z.util.undo()
-  z.util.redo()
-</code></pre>
+<div class="highlight highlight-coffeescript"><pre><span class="nx">$</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">active</span><span class="p">().</span><span class="nx">then</span> <span class="nf">(window) -&gt;</span>
+  <span class="nb">window</span><span class="p">.</span><span class="nx">maximise</span><span class="p">()</span>
+  <span class="nx">$</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">undo</span><span class="p">()</span>
+  <span class="nx">$</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">redo</span><span class="p">()</span>
+</pre></div>
 
 <h2>
 <a name="tests" class="anchor" href="#tests"><span class="octicon octicon-link"></span></a>Tests</h2>
