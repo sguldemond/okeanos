@@ -8,15 +8,15 @@ This is a fork of `node-zephyros` by Daniel Polencic. The main difference is tha
 This allows for more control over Zephyros but has a lot more callbacks.
 
 ## Usage
-Include `zephyros` in your script and you're ready to go!
+Include `okeanos` in your script and you're ready to go!
 
 ```node
-Zephyros = require('zephyros')
+Okeanos = require 'okeanos'
 
-z = new Zephyros()
+$ = new Okeanos()
 
-z.bind('h', ['Cmd', 'Shift']).then ->
-  z.window.active().then (window) ->
+$.bind('h', ['Cmd', 'Shift']).then ->
+  $.window.active().then (window) ->
     window.nudge -100, 0
 
 ```
@@ -29,7 +29,7 @@ Listen to a particular key combination and fire the chain every time such
 shortcut is triggered.
 
 ```node
-z.bind('t', ['Cmd', 'Shift']).then ->
+$.bind('t', ['Cmd', 'Shift']).then ->
   console.log 'Hey, you pressed t+⌘⌃'
 ```
 
@@ -39,7 +39,7 @@ Listen to a particular event and fire the chain every time this event occurs.
 A comprehensive list of events is available [here](https://github.com/sdegutis/zephyros/blob/master/Docs/Protocol.md)
 
 ```node
-z.listen('window_created').then ->
+$.listen('window_created').then ->
   console.log 'Hey, you created a new window!'
 ```
 
@@ -48,7 +48,7 @@ z.listen('window_created').then ->
 This helps a lot with callback hell.
 
 ```node
-z.window.active().then (window) ->
+$.window.active().then (window) ->
   window.getTitle().then (title) ->
     window.getFrame().then (frame) ->
       window.getScreen().then (screen) ->
@@ -58,15 +58,15 @@ z.window.active().then (window) ->
 You can use it by requesting all the info at the same time via `model.preload()`.
 
 ```node
-z.window.active().then (window) ->
+$.window.active().then (window) ->
   window.preload('title', 'frame', 'screen').then ->
     console.log window.title, window.frame, window.screen
 ```
 
-Even better is that you can use preloading directly on `z.window.*`, `z.screen.*` and `z.app.*` methods.
+Even better is that you can use preloading directly on `okeanos.window.*`, `okeanos.screen.*` and `okeanos.app.*` methods.
 
 ```node
-z.window.active('title', 'frame', 'screen').then (window) ->
+$.window.active('title', 'frame', 'screen').then (window) ->
   console.log window.title, window.frame, window.screen
 ```
 
@@ -78,7 +78,7 @@ z.window.active('title', 'frame', 'screen').then (window) ->
 Return a window object with the `id` of the focused window.
 
 ```node
-z.window.active().then (window) ->
+$.window.active().then (window) ->
   console.log window.id
 ```
 
@@ -86,7 +86,7 @@ z.window.active().then (window) ->
 Return an array containing a window object for each visible window.
 
 ```node
-z.window.visible().then (windows) ->
+$.window.visible().then (windows) ->
   for window in windows
     console.log window.id
 ```
@@ -95,7 +95,7 @@ z.window.visible().then (windows) ->
 Return an array containing a window object for all the windows.
 
 ```node
-z.window.all().then (windows) ->
+$.window.all().then (windows) ->
   for window in windows
     console.log window.id
 ```
@@ -107,7 +107,7 @@ z.window.all().then (windows) ->
 Returns the window title as a string. Cached as `window.title`.
 
 ```node
-z.window.active().then (window) ->
+$.window.active().then (window) ->
   window.getTitle().then (title) ->
     console.log title
 ```
@@ -117,7 +117,7 @@ z.window.active().then (window) ->
 Returns the screen that the windows is in as a new Screen object. Cached as `window.screen`.
 
 ```node
-z.window.active().then (window) ->
+$.window.active().then (window) ->
   window.getScreen().then (screen) ->
     console.log screen.id
 ```
@@ -127,7 +127,7 @@ z.window.active().then (window) ->
 Returns the app that created the window as a new App object. Cached as `window.app`.
 
 ```node
-z.window.active().then (window) ->
+$.window.active().then (window) ->
   window.getApp().then (app) ->
     console.log app.id
 ```
@@ -137,7 +137,7 @@ z.window.active().then (window) ->
 Return the coordinates for the window frame in the format {x, y, w, h}. Cached as `window.frame`.
 
 ```node
-z.window.active().then (window) ->
+$.window.active().then (window) ->
   window.getFrame().then (frame) ->
     console.log frame
 ```
@@ -147,7 +147,7 @@ z.window.active().then (window) ->
 Set the window frame.
 
 ```node
-z.window.active().then (window) ->
+$.window.active().then (window) ->
   window.getFrame().then (frame) ->
     window.setFrame
       x: frame.x / 2
@@ -161,7 +161,7 @@ z.window.active().then (window) ->
 Return the size of the window as { w: width, h: height }.
 
 ```node
-z.window.active().then (window) ->
+$.window.active().then (window) ->
   window.getSize().then (size) ->
     console.log 'width:', size.w,
     console.log 'height:', size.h
@@ -172,7 +172,7 @@ z.window.active().then (window) ->
 Set the width and height of the window frame.
 
 ```node
-z.window.active().then (window) ->
+$.window.active().then (window) ->
   window.setSize
     w: 200
     h: 300
@@ -183,7 +183,7 @@ z.window.active().then (window) ->
 Resize the window by adding onto the current size.
 
 ```node
-z.window.active().then (window) ->
+$.window.active().then (window) ->
   window.resize
     w: -100
     h: 200
@@ -207,7 +207,7 @@ Set the position of the top left corner of the window relative to it's current p
 Maximize the window.
 
 ```node
-z.window.active().then (window) ->
+$.window.active().then (window) ->
   window.maximize()
 ```
 
@@ -216,7 +216,7 @@ z.window.active().then (window) ->
 Minimize the window.
 
 ```node
-z.window.active().then (window) ->
+$.window.active().then (window) ->
   window.minimize()
 ```
 
@@ -225,7 +225,7 @@ z.window.active().then (window) ->
 Unminimize the window.
 
 ```node
-z.window.active().then (window) ->
+$.window.active().then (window) ->
   window.unminimize()
 ```
 
@@ -238,7 +238,7 @@ Focus the current window.
 Move the focus from this window to the specified direction.
 
 ```node
-z.window.active().then (window) ->
+$.window.active().then (window) ->
   window.focusTo 'right'
 ```
 
@@ -248,7 +248,7 @@ Return an array of window objects for windows located on the {north, south,
 east, west} of this window.
 
 ```node
-z.window.active().then (window) ->
+$.window.active().then (window) ->
   window.getWindowsTo('north').then (windows) ->
     for window in windows
       console.log window.id
@@ -310,7 +310,7 @@ Rotate the display.
 Return an array of all the running applications.
 
 ```node
-z.app.all('title').then (apps) ->
+$.app.all('title').then (apps) ->
   for app in apps
     console.log app.title
 ```
@@ -320,6 +320,12 @@ z.app.all('title').then (apps) ->
 **allWindows()**
 
 Get all the windows created by this application. Cached as `app.all`.
+
+```node
+$.window.active('app').then (window) ->
+  window.app.allWindows().then (windows) ->
+    console.log windows
+```
 
 **visibleWindows()**
 
@@ -358,7 +364,7 @@ Kill9 the application.
 Return a string with the content of the clipboard
 
 ```node
-z.util.clipboard().then (clipboard) ->
+$.util.clipboard().then (clipboard) ->
   console.log clipboard
 ```
 
@@ -367,7 +373,7 @@ z.util.clipboard().then (clipboard) ->
 Trigger an update for Zephyros settings.
 
 ```node
-z.util.updateSettings()
+$.util.updateSettings()
 ```
 
 **relaunch()**
@@ -375,7 +381,7 @@ z.util.updateSettings()
 Force a reload of the config file.
 
 ```node
-z.util.relaunch()
+$.util.relaunch()
 ```
 
 **alert( message, [duration = 1] )**
@@ -383,9 +389,9 @@ z.util.relaunch()
 Prompt an alter.
 
 ```node
-z.util.alert 'hello world'    # show for 1 second
-z.util.alert 'hello world', 5 # show for 5 seconds
-z.util.alert
+$.util.alert 'hello world'    # show for 1 second
+$.util.alert 'hello world', 5 # show for 5 seconds
+$.util.alert
   message: 'hello world'
   duration: 5
 ```
@@ -395,7 +401,7 @@ z.util.alert
 Log a string.
 
 ```node
-z.util.log 'hello world'
+$.util.log 'hello world'
 ```
 
 **chooseFrom( list, title, width, height )**
@@ -403,7 +409,7 @@ z.util.log 'hello world'
 Choose a list of items from a dynamically populated popup.
 
 ```node
-z.util.chooseFrom(
+$.util.chooseFrom(
   list: ['Banana', 'Pineapple', 'Orange']
   title: 'Fruits'
   height: 10
@@ -417,10 +423,10 @@ z.util.chooseFrom(
 Undo the last action.
 
 ```node
-z.window.active().then (window) ->
+$.window.active().then (window) ->
   window.maximise()
-  z.util.undo()
-  z.util.redo()
+  $.util.undo()
+  $.util.redo()
 ```
 
 **redo()**
@@ -428,10 +434,10 @@ z.window.active().then (window) ->
 Redo the last action.
 
 ```node
-z.window.active().then (window) ->
+$.window.active().then (window) ->
   window.maximise()
-  z.util.undo()
-  z.util.redo()
+  $.util.undo()
+  $.util.redo()
 ```
 
 ## Tests

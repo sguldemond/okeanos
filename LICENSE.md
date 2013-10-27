@@ -1,5 +1,5 @@
-Copyright (c) 2013 Daniele Polencic
-http://danielepolencic.github.io/zephyros/
+Copyright (c) 2013 George Czabania
+http://stayradiated.github.io/okeanos/
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
