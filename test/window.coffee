@@ -1,4 +1,4 @@
-Zephyros = require '../source/zephyros'
+Okeanos = require '../source/okeanos'
 assert   = require 'assert'
 Server   = require './server'
 
@@ -18,32 +18,32 @@ describe 'Window', ->
 
   it 'should get the focused window', (done) ->
 
-    z = new Zephyros options
+    $ = new Okeanos options
 
     server.replyWith '1'
 
-    z.window.active().then (win) ->
+    $.window.active().then (win) ->
       assert.equal win.id, 1
       done()
 
   it 'should get all the windows', (done) ->
 
-    z = new Zephyros options
+    $ = new Okeanos options
 
     # [ container [ replies [ arguments [ content ]]]]
     server.replyWith [[[ [1, 2, 3, 4] ]]]
 
-    z.window.all().then (windows) ->
+    $.window.all().then (windows) ->
       assert.equal windows.length, 4
       done()
 
   it 'should get the window title', (done) ->
 
-    z = new Zephyros options
+    $ = new Okeanos options
 
     server.replyWith '1',
 
-    z.window.active().then (win) ->
+    $.window.active().then (win) ->
       assert.equal win.id, 1
 
       server.replyWith 'Window title'
@@ -54,11 +54,11 @@ describe 'Window', ->
 
   it 'should preload load multiple parameters', (done) ->
 
-    z = new Zephyros options
+    $ = new Okeanos options
 
     server.replyWith [1, 'Title', no]
 
-    z.window.active().then (win) ->
+    $.window.active().then (win) ->
       assert.equal win.id, 1
 
       win.preload('title', 'normal').then (win) ->

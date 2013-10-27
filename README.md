@@ -1,9 +1,7 @@
 # Okeanos
 Node.js adapter for [Zephyros](https://github.com/sdegutis/zephyros) - the OS X window manager for hackers.
 
-This is a fork of [`node-zephyros`](https://github.com/danielepolencic/node-zephyros) by [danielepolencic](https://github.com/danielepolencic). The main difference is that this uses a class based API where the original used a chaining system.
-
-This allows for more control over Zephyros but has a lot more callbacks.
+This is a fork of [`node-zephyros`](https://github.com/danielepolencic/node-zephyros) by [danielepolencic](https://github.com/danielepolencic). The main difference is that this uses a class based API where the original used a chaining system. Okeanos gives you a lot of control over objects.
 
 ## Usage
 Include `okeanos` in your script and you're ready to go!
@@ -252,9 +250,13 @@ $.window.active().then (window) ->
       console.log window.id
 ```
 
-**getOtherWindows( {all: yes/no } )**
+**getOtherWindows()**
 
-Get an array of all the other windows on the same screen. If `all` is true, then it will return all the windows on all the screens.
+Get an array of all the other windows on the same screen. Cached as `allOtherWindows`.
+
+**getAllOtherWindows()**
+
+Get an array of all the other windows on all the screens. Cached as `allOtherWindows`.
 
 **isNormal()**
 

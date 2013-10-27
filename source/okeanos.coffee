@@ -7,7 +7,7 @@ app     = require './app'
 grid    = require './grid'
 Stack   = require './stack'
 
-class Zephyros
+class Okeanos
 
   constructor: (options = path: '/tmp/zephyros.sock') ->
     @client = new Client(options)
@@ -20,6 +20,9 @@ class Zephyros
       .then undefined, undefined, stack.run
     return stack
 
+  unbind: (key, modifier) =>
+    @client.once 0, 'unbind', key, modifier
+
   listen: (event) =>
     stack = new Stack()
     @client
@@ -27,10 +30,13 @@ class Zephyros
       .then undefined, undefined, stack.run
     return stack
 
+  unlisten: (event) =>
+    @client.once 0, 'unlisten', event
+
   app:    app
   util:   util
   window: window
   screen: screen
   grid:   grid
 
-module.exports = Zephyros
+module.exports = Okeanos

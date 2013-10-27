@@ -14,6 +14,8 @@ class Window
     position: 'getPosition'
     normal: 'isNormal'
     minimized: 'isMinimized'
+    otherWindows: 'getOtherWindows'
+    allOtherWindows: 'getAllOtherWindows'
 
   constructor: (@id) ->
     @client = wrap @id
@@ -37,6 +39,14 @@ class Window
 
   setFrame: (x, y, w, h) =>
     @client 'set_frame', if x.x? then x else { x:x, y:y, w:w, h:h }
+
+  move: (x, y, w, h) =>
+    @getFrame().then =>
+      @setFrame
+        x: @frame.x + x
+        y: @frame.y + y
+        w: @frame.w + w
+        h: @frame.h + h
 
 
   getSize: =>
@@ -88,11 +98,13 @@ class Window
     @client('windows_to_' + direction).then (windows) =>
       @windowsTo[direction] = windows.map (id) -> new Window(id)
 
-  getOtherWindows: (options = {}) =>
-    if options.all
-      @client 'other_windows_on_all_screens'
-    else
-      @client 'other_windows_on_same_screen'
+  getOtherWindows: =>
+    @client('other_windows_on_same_screen').then (windows) =>
+      @otherWindows = windows.map (id) -> new Window(id)
+
+  getAllOtherWindows: =>
+    @client('other_windows_on_all_screens').then (windows) =>
+      @allOtherWindows = windows.map (id) -> new Window(id)
 
 
   isNormal: =>
