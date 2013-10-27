@@ -1,8 +1,6 @@
 # Okeanos
 Node.js adapter for [Zephyros](https://github.com/sdegutis/zephyros) - the OS X window manager for hackers.
 
-![Zephyros Demo](http://i.imgur.com/bXDlfH0.gif)
-
 This is a fork of [`node-zephyros`](https://github.com/danielepolencic/node-zephyros) by [danielepolencic](https://github.com/danielepolencic). The main difference is that this uses a class based API where the original used a chaining system.
 
 This allows for more control over Zephyros but has a lot more callbacks.
