@@ -1,4 +1,4 @@
-# Zephyros.js
+# Okeanos
 Node.js adapter for [Zephyros](https://github.com/sdegutis/zephyros) - the OS X window manager for hackers.
 
 ![Zephyros Demo](http://i.imgur.com/bXDlfH0.gif)
