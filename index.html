@@ -1,395 +1,452 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Zephyros by danielepolencic</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+
+    <title>Okeanos by stayradiated</title>
   </head>
+
   <body>
-    <div class="wrapper">
-      <header>
-        <h1>Zephyros</h1>
-        <p></p>
+    <header>
+      <div class="inner">
+        <h1>Okeanos</h1>
+        <h2></h2>
+        <a href="https://github.com/stayradiated/okeanos" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
 
-        <p class="view"><a href="https://github.com/danielepolencic/node-zephyros">View the Project on GitHub <small>danielepolencic/node-zephyros</small></a></p>
-
-
-        <ul>
-          <li><a href="https://github.com/danielepolencic/node-zephyros/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/danielepolencic/node-zephyros/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/danielepolencic/node-zephyros">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <h1>
-<a name="node-zephyros-" class="anchor" href="#node-zephyros-"><span class="octicon octicon-link"></span></a>node-zephyros <a href="https://travis-ci.org/danielepolencic/zephryos"><img src="https://travis-ci.org/danielepolencic/zephyros.png" alt="Build Status"></a>
-</h1>
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a name="okeanos" class="anchor" href="#okeanos"><span class="octicon octicon-link"></span></a>Okeanos</h1>
 
 <p>Node.js adapter for <a href="https://github.com/sdegutis/zephyros">Zephyros</a> - the OS X window manager for hackers.</p>
 
 <p><img src="http://i.imgur.com/bXDlfH0.gif" alt="Zephyros Demo"></p>
 
+<p>This is a fork of <code>node-zephyros</code> by Daniel Polencic. The main difference is that this uses a class based API where the original used a chaining system.</p>
+
+<p>This allows for more control over Zephyros but has a lot more callbacks.</p>
+
 <h2>
 <a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
 
-<p>Include <code>node-zephiros</code> in your script and you're ready to go!</p>
+<p>Include <code>zephyros</code> in your script and you're ready to go!</p>
 
-<pre lang="node"><code>var Zephyros = require('node-zephyros');
+<pre lang="node"><code>Zephyros = require('zephyros')
 
-var z = new Zephyros();
+z = new Zephyros()
 
-z.bind('t', ['Cmd', 'Shift']).clipboardContents().then(function(clipboard){
-  console.log("clipboard: ", clipboard);
-});
+z.bind('h', ['Cmd', 'Shift']).then -&gt;
+  z.window.active().then (window) -&gt;
+    window.nudge -100, 0
+
 </code></pre>
 
 <h2>
-<a name="api" class="anchor" href="#api"><span class="octicon octicon-link"></span></a>API</h2>
+<a name="react-to-events" class="anchor" href="#react-to-events"><span class="octicon octicon-link"></span></a>React to events</h2>
 
-<h3>
-<a name="starting-a-chain" class="anchor" href="#starting-a-chain"><span class="octicon octicon-link"></span></a>Starting a chain</h3>
-
-<p>There are three types of methods that can initiate a new chain:</p>
-
-<p><strong>bind</strong><br><code>bind( key&lt;String&gt;, modifier&lt;Array&gt; )</code><br>
+<p><strong>bind</strong>
+<code>bind( key&lt;String&gt;, modifier&lt;Array&gt; )</code>
 Listen to a particular key combination and fire the chain every time such
 shortcut is triggered.</p>
 
-<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift']).then(function(){
-  console.log('Hey, you pressed t+⌘⌃');
-});
+<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift']).then -&gt;
+  console.log 'Hey, you pressed t+⌘⌃'
 </code></pre>
 
-<p><strong>listen</strong><br><code>listen( event&lt;String&gt; )</code><br>
+<p><strong>listen</strong>
+<code>listen( event&lt;String&gt; )</code>
 Listen to a particular event and fire the chain every time this event occurs.
 A comprehensive list of events is available <a href="https://github.com/sdegutis/zephyros/blob/master/Docs/Protocol.md">here</a></p>
 
-<pre lang="node"><code>z.listen('window_created').then(function(){
-  console.log('Hey, you created a new window!');
-});
+<pre lang="node"><code>z.listen('window_created').then -&gt;
+  console.log 'Hey, you created a new window!'
 </code></pre>
 
-<p><strong>api</strong><br><code>api()</code><br>
-Manually trigger a chain.</p>
+<h2>
+<a name="preloading" class="anchor" href="#preloading"><span class="octicon octicon-link"></span></a>Preloading</h2>
 
-<pre lang="node"><code>z.api().then(function(){
-  console.log('Fired immediately only once.');
-});
+<p>This helps a lot with callback hell.</p>
+
+<pre lang="node"><code>z.window.active().then (window) -&gt;
+  window.getTitle().then (title) -&gt;
+    window.getFrame().then (frame) -&gt;
+      window.getScreen().then (screen) -&gt;
+        console.log title, frame, screen
 </code></pre>
 
-<p>When a new chain is initialised, you can use the API to interact with
-<a href="#window">Windows</a>, <a href="#app">Apps</a>, <a href="#screen">Screens</a> or <a href="#util">Utils</a>.</p>
+<p>You can use it by requesting all the info at the same time via <code>model.preload()</code>.</p>
+
+<pre lang="node"><code>z.window.active().then (window) -&gt;
+  window.preload('title', 'frame', 'screen').then -&gt;
+    console.log window.title, window.frame, window.screen
+</code></pre>
+
+<p>Even better is that you can use preloading directly on <code>z.window.*</code>, <code>z.screen.*</code> and <code>z.app.*</code> methods.</p>
+
+<pre lang="node"><code>z.window.active('title', 'frame', 'screen').then (window) -&gt;
+  console.log window.title, window.frame, window.screen
+</code></pre>
+
+<h2>
+<a name="window" class="anchor" href="#window"><span class="octicon octicon-link"></span></a>Window</h2>
 
 <h3>
-<a name="window" class="anchor" href="#window"><span class="octicon octicon-link"></span></a>Window</h3>
+<a name="api" class="anchor" href="#api"><span class="octicon octicon-link"></span></a>API</h3>
 
-<p><strong>windowFocused</strong><br>
+<p><strong>active</strong>
 Return a window object with the <code>id</code> of the focused window.</p>
 
-<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift']).windowFocused().then(function(window){
-  console.log(window.id);
-});
+<pre lang="node"><code>z.window.active().then (window) -&gt;
+  console.log window.id
 </code></pre>
 
-<p><strong>windowsVisible</strong><br>
+<p><strong>visible</strong>
 Return an array containing a window object for each visible window.</p>
 
-<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift']).windowsVisible().then(function(windows){
-  window.forEach(console.log);
-});
+<pre lang="node"><code>z.window.visible().then (windows) -&gt;
+  for window in windows
+    console.log window.id
 </code></pre>
 
-<p><strong>windows</strong><br>
+<p><strong>all</strong>
 Return an array containing a window object for all the windows.</p>
 
-<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift']).windows().then(function(windows){
-  window.forEach(console.log);
-});
-</code></pre>
-
-<p><strong>windowTitle</strong><br>
-Return a window object with the <code>id</code> of the window and the <code>title</code>.</p>
-
-<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift'])
-.windowFocused()
-.windowTitle()
-.then(function(window){
-  console.log(window.title);
-});
-</code></pre>
-
-<p><strong>getWindowFrame</strong><br>
-Return a window object with the <code>id</code> of the window and the <code>frame</code>.</p>
-
-<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift'])
-.windowFocused()
-.getWindowFrame()
-.then(function(window){
-  console.log(window.frame); // {x: 0, y: 0, w: 200, h: 200}
-});
-</code></pre>
-
-<p><strong>setWindowFrame</strong><br>
-Set the window frame for the window identified by <code>id</code>.</p>
-
-<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift'])
-.windowFocused()
-.getWindowFrame()
-.setWindowFrame(function(window){
-  window.frame.w /= 2;
-  return window;
-});
-</code></pre>
-
-<p><strong>maximize</strong><br>
-Maximize the window identified by <code>id</code>.</p>
-
-<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift'])
-.windowFocused()
-.maximize();
-</code></pre>
-
-<p><strong>minimize</strong><br>
-Minimize the window identified by <code>id</code>.</p>
-
-<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift'])
-.windowFocused()
-.minimize();
-</code></pre>
-
-<p><strong>unminimize</strong><br>
-Unminimize the window identified by <code>id</code>.</p>
-
-<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift'])
-.windowFocused()
-.unminimize();
-</code></pre>
-
-<p><strong>windowFocus{up, down, right, left}</strong><br>
-Focus the window identified by <code>id</code> to the {right, left, up, down}.</p>
-
-<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift'])
-.windowFocused()
-.windowFocusUp();
-</code></pre>
-
-<p><strong>windowsTo{north, south, east, west}</strong><br>
-Return an array of window objects for windows located on the {north, south,
-east, west}.</p>
-
-<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift'])
-.windowsToNorth()
-.then(function(windows){
-  windows.forEach(console.log);
-});
+<pre lang="node"><code>z.window.all().then (windows) -&gt;
+  for window in windows
+    console.log window.id
 </code></pre>
 
 <h3>
-<a name="screen" class="anchor" href="#screen"><span class="octicon octicon-link"></span></a>Screen</h3>
+<a name="class" class="anchor" href="#class"><span class="octicon octicon-link"></span></a>Class</h3>
 
-<p><strong>screenFromWindow</strong><br>
-Get the screen object from the window identified by <code>id</code>.</p>
+<p><strong>getTitle()</strong></p>
 
-<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift'])
-.windowFocused()
-.screenFromWindow()
-.then(function(screen){
-  console.log(screen); //{ id: 2 }
-});
+<p>Returns the window title as a string. Cached as <code>window.title</code>.</p>
+
+<pre lang="node"><code>z.window.active().then (window) -&gt;
+  window.getTitle().then (title) -&gt;
+    console.log title
 </code></pre>
 
-<p><strong>mainScreen</strong><br>
-Get the main screen object.</p>
+<p><strong>getScreen()</strong></p>
 
-<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift'])
-.mainScreen()
-.then(function(screen){
-  console.log(screen); //{ id: 1 }
-});
+<p>Returns the screen that the windows is in as a new Screen object. Cached as <code>window.screen</code>.</p>
+
+<pre lang="node"><code>z.window.active().then (window) -&gt;
+  window.getScreen().then (screen) -&gt;
+    console.log screen.id
 </code></pre>
 
-<p><strong>frameIncludingDockAndMenu</strong><br>
-Get the frame including the dock and the menu for a screen identified by <code>id</code>.</p>
+<p><strong>getApp()</strong></p>
 
-<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift'])
-.mainScreen()
-.frameIncludingDockAndMenu()
-.then(function(screen){
-  console.log(screen.frame); //{ x: 0, y: 0, w: 100, h: 100 }
-});
+<p>Returns the app that created the window as a new App object. Cached as <code>window.app</code>.</p>
+
+<pre lang="node"><code>z.window.active().then (window) -&gt;
+  window.getApp().then (app) -&gt;
+    console.log app.id
 </code></pre>
 
-<p><strong>frameWithoutDockOrMenu</strong><br>
-Get the frame without the dock or menu for a screen identified by <code>id</code>.</p>
+<p><strong>getFrame()</strong></p>
 
-<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift'])
-.mainScreen()
-.frameWithoutDockOrMenu()
-.then(function(screen){
-  console.log(screen.frame); //{ x: 0, y: 0, w: 80, h: 80 }
-});
+<p>Return the coordinates for the window frame in the format {x, y, w, h}. Cached as <code>window.frame</code>.</p>
+
+<pre lang="node"><code>z.window.active().then (window) -&gt;
+  window.getFrame().then (frame) -&gt;
+    console.log frame
 </code></pre>
 
-<p><strong>screens</strong><br>
-Return an array containing a screen object for all the screens available.</p>
+<p><strong>setFrame( {x, y, w, h} OR x, y, w, h )</strong></p>
 
-<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift'])
-.screens()
-.then(function(screens){
-  screens.forEach(console.log);
-});
+<p>Set the window frame.</p>
+
+<pre lang="node"><code>z.window.active().then (window) -&gt;
+  window.getFrame().then (frame) -&gt;
+    window.setFrame
+      x: frame.x / 2
+      y: frame.y / 2
+      w: frame.w * 2
+      h: frame.h * 2
+</code></pre>
+
+<p><strong>getSize()</strong></p>
+
+<p>Return the size of the window as { w: width, h: height }.</p>
+
+<pre lang="node"><code>z.window.active().then (window) -&gt;
+  window.getSize().then (size) -&gt;
+    console.log 'width:', size.w,
+    console.log 'height:', size.h
+</code></pre>
+
+<p><strong>setSize( {w, h} OR w, h )</strong></p>
+
+<p>Set the width and height of the window frame.</p>
+
+<pre lang="node"><code>z.window.active().then (window) -&gt;
+  window.setSize
+    w: 200
+    h: 300
+</code></pre>
+
+<p><strong>resize( w, h )</strong></p>
+
+<p>Resize the window by adding onto the current size.</p>
+
+<pre lang="node"><code>z.window.active().then (window) -&gt;
+  window.resize
+    w: -100
+    h: 200
+  # will shrink the width by 100px and add 200px to the height
+</code></pre>
+
+<p><strong>getPosition()</strong></p>
+
+<p>Return the position of the top left corner of the window as { x, y }.</p>
+
+<p><strong>setPosition( {x, y} OR x, y )</strong></p>
+
+<p>Set the position of the top left corner of the window.</p>
+
+<p><strong>nudge( x, y )</strong></p>
+
+<p>Set the position of the top left corner of the window relative to it's current position.</p>
+
+<p><strong>maximize()</strong></p>
+
+<p>Maximize the window.</p>
+
+<pre lang="node"><code>z.window.active().then (window) -&gt;
+  window.maximize()
+</code></pre>
+
+<p><strong>minimize()</strong></p>
+
+<p>Minimize the window.</p>
+
+<pre lang="node"><code>z.window.active().then (window) -&gt;
+  window.minimize()
+</code></pre>
+
+<p><strong>unminimize()</strong></p>
+
+<p>Unminimize the window.</p>
+
+<pre lang="node"><code>z.window.active().then (window) -&gt;
+  window.unminimize()
+</code></pre>
+
+<p><strong>focus()</strong></p>
+
+<p>Focus the current window.</p>
+
+<p><strong>focusTo( ['up', 'down', 'right', 'left'] )</strong></p>
+
+<p>Move the focus from this window to the specified direction.</p>
+
+<pre lang="node"><code>z.window.active().then (window) -&gt;
+  window.focusTo 'right'
+</code></pre>
+
+<p><strong>getWindowsTo( ['north', 'south', 'east', 'west'] )</strong></p>
+
+<p>Return an array of window objects for windows located on the {north, south,
+east, west} of this window.</p>
+
+<pre lang="node"><code>z.window.active().then (window) -&gt;
+  window.getWindowsTo('north').then (windows) -&gt;
+    for window in windows
+      console.log window.id
+</code></pre>
+
+<p><strong>getOtherWindows( {all: yes/no } )</strong></p>
+
+<p>Get an array of all the other windows on the same screen. If <code>all</code> is true, then it will return all the windows on all the screens.</p>
+
+<p><strong>isNormal()</strong></p>
+
+<p>Check if the window is normal. Not sure what this means yet. Cached as <code>window.normal</code>.</p>
+
+<p><strong>isMinimized()</strong></p>
+
+<p>Check if the window is minimized. Cached as <code>window.minimized</code></p>
+
+<h2>
+<a name="screen" class="anchor" href="#screen"><span class="octicon octicon-link"></span></a>Screen</h2>
+
+<h3>
+<a name="api-1" class="anchor" href="#api-1"><span class="octicon octicon-link"></span></a>API</h3>
+
+<p><strong>main()</strong></p>
+
+<p>Return the main screen.</p>
+
+<p><strong>all()</strong></p>
+
+<p>Return an array of all the screens.</p>
+
+<h3>
+<a name="class-1" class="anchor" href="#class-1"><span class="octicon octicon-link"></span></a>Class</h3>
+
+<p><strong>getFrame()</strong></p>
+
+<p>Get the frame of the <em>usable</em> part of the screen -- meaning it doesn't include the dock or menu.</p>
+
+<p><strong>getFullFrame()</strong></p>
+
+<p>Get the frame of the entire screen -- including the dock and menu.</p>
+
+<p><strong>previous()</strong></p>
+
+<p>Get the previous screen.</p>
+
+<p><strong>next()</strong></p>
+
+<p>Get the next screen.</p>
+
+<p><strong>rotate( [0, 90, 180, 270 ] )</strong></p>
+
+<p>Rotate the display.</p>
+
+<h2>
+<a name="app" class="anchor" href="#app"><span class="octicon octicon-link"></span></a>App</h2>
+
+<h3>
+<a name="api-2" class="anchor" href="#api-2"><span class="octicon octicon-link"></span></a>Api</h3>
+
+<p><strong>all()</strong></p>
+
+<p>Return an array of all the running applications.</p>
+
+<pre lang="node"><code>z.app.all('title').then (apps) -&gt;
+  for app in apps
+    console.log app.title
 </code></pre>
 
 <h3>
-<a name="app" class="anchor" href="#app"><span class="octicon octicon-link"></span></a>App</h3>
+<a name="class-2" class="anchor" href="#class-2"><span class="octicon octicon-link"></span></a>Class</h3>
 
-<p><strong>appFromWindow</strong><br>
-Get the app object from the window identified by <code>id</code>.</p>
+<p><strong>allWindows()</strong></p>
 
-<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift'])
-.windowFocused()
-.appFromWindow()
-.then(function(app){
-  console.log(app); //{ id: 1 }
-});
-</code></pre>
+<p>Get all the windows created by this application. Cached as <code>app.all</code>.</p>
 
-<p><strong>apps</strong><br>
-Return an array containing an app object for all the apps running.</p>
+<p><strong>visibleWindows()</strong></p>
 
-<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift'])
-.apps()
-.then(function(screens){
-  screens.forEach(console.log);
-});
-</code></pre>
+<p>Get all the <em>visible</em> windows created by this application. Cached as <code>app.visible</code>.</p>
 
-<p><strong>appTitle</strong><br>
-Return the app object with the <code>id</code> of the app and the <code>title</code>.</p>
+<p><strong>getTitle()</strong></p>
 
-<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift'])
-.windowFocused()
-.appFromWindow()
-.appTitle()
-.then(function(app){
-  console.log(app); // {id: 1, title: 'Zephyros'}
-});
-</code></pre>
+<p>Get the title of the appliation. Cached as <code>app.title</code>.</p>
 
-<p><strong>appIsHidden</strong><br>
-Return the app object with the <code>id</code> of the app and the boolean <code>isHidden</code> set to
-false if the app is not hidden.</p>
+<p><strong>isHidden()</strong></p>
 
-<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift'])
-.windowFocused()
-.appFromWindow()
-.appIsHidden()
-.then(function(app){
-  console.log(app); // {id: 1, isHidden: false}
-});
-</code></pre>
+<p>Check if the app is hiden. Cached as <code>app.hidden</code>.</p>
 
-<p><strong>appShow</strong><br>
-Show the app identified by <code>id</code>.</p>
+<p><strong>show()</strong></p>
 
-<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift'])
-.windowFocused()
-.appFromWindow()
-.appHide()
-.appShow()
-</code></pre>
+<p>Show the application.</p>
 
-<p><strong>appHide</strong><br>
-Hide the app identified by <code>id</code>.</p>
+<p><strong>hide()</strong></p>
 
-<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift'])
-.windowFocused()
-.appFromWindow()
-.appHide()
-.appShow()
-</code></pre>
+<p>Hide the application.</p>
 
-<p><strong>appKill</strong><br>
-Kill the app identified by <code>id</code>.</p>
+<p><strong>kill()</strong></p>
 
-<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift'])
-.windowFocused()
-.appFromWindow()
-.appKill()
-</code></pre>
+<p>Kill the application.</p>
 
-<p><strong>appKill9</strong><br>
-Kill9 the app identified by <code>id</code>.</p>
+<p><strong>kill9()</strong></p>
 
-<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift'])
-.windowFocused()
-.appFromWindow()
-.appKill9()
-</code></pre>
+<p>Kill9 the application.</p>
+
+<h2>
+<a name="util" class="anchor" href="#util"><span class="octicon octicon-link"></span></a>Util</h2>
 
 <h3>
-<a name="util" class="anchor" href="#util"><span class="octicon octicon-link"></span></a>Util</h3>
+<a name="api-3" class="anchor" href="#api-3"><span class="octicon octicon-link"></span></a>Api</h3>
 
-<p><strong>clipboardContents</strong><br>
-Return a string with the content of the clipboard</p>
+<p><strong>clipboard()</strong></p>
 
-<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift'])
-.clipboardContents()
-.then(function(clipboard){
-  console.log(clipboard); // Zephyros
-});
+<p>Return a string with the content of the clipboard</p>
+
+<pre lang="node"><code>z.util.clipboard().then (clipboard) -&gt;
+  console.log clipboard
 </code></pre>
 
-<p><strong>updateSettings</strong><br>
-Trigger an update for Zephyros settings.</p>
+<p><strong>updateSettings()</strong></p>
 
-<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift']).updateSettings();
+<p>Trigger an update for Zephyros settings.</p>
+
+<pre lang="node"><code>z.util.updateSettings()
 </code></pre>
 
-<p><strong>reloadConfig</strong><br>
-Force a reload of the config file.</p>
+<p><strong>relaunch()</strong></p>
 
-<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift']).reloadConfig();
+<p>Force a reload of the config file.</p>
+
+<pre lang="node"><code>z.util.relaunch()
 </code></pre>
 
-<p><strong>alert</strong><br>
-Prompt an alter.</p>
+<p><strong>alert( message, [duration = 1] )</strong></p>
 
-<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift']).alert({message: 'Hello'});
-z.bind('t', ['Cmd', 'Shift']).alert('Hello'); // as above
-z.bind('t', ['Cmd', 'Shift']).alert(function(){
-  return { message: 'Hello World', duration: 3 };
-}); // as above
+<p>Prompt an alter.</p>
+
+<pre lang="node"><code>z.util.alert 'hello world'    # show for 1 second
+z.util.alert 'hello world', 5 # show for 5 seconds
+z.util.alert
+  message: 'hello world'
+  duration: 5
 </code></pre>
 
-<p><strong>log</strong><br>
-Log a string.</p>
+<p><strong>log( message )</strong></p>
 
-<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift']).log({message: 'Log'});
-z.bind('t', ['Cmd', 'Shift']).log('Hello'); // as above
-z.bind('t', ['Cmd', 'Shift']).alert(function(){
-  return 'Log';
-}); // as above
+<p>Log a string.</p>
+
+<pre lang="node"><code>z.util.log 'hello world'
 </code></pre>
 
-<p><strong>chooseFrom</strong><br>
-Choose a list of items from a dinamically populated popup.</p>
+<p><strong>chooseFrom( list, title, width, height )</strong></p>
 
-<pre lang="node"><code>z.bind('t', ['Cmd', 'Shift']).chooseFrom({
-  list: ['Banana', 'Pineapple', 'Orange'],
-  title: 'Fruits',
-  lines_tall: 10,
-  chars_wide: 30
-}).then(function(selected){
-  console.log(selected); // index of the array
-});
+<p>Choose a list of items from a dynamically populated popup.</p>
+
+<pre lang="node"><code>z.util.chooseFrom(
+  list: ['Banana', 'Pineapple', 'Orange']
+  title: 'Fruits'
+  height: 10
+  width: 30
+).then (selected) -&gt;
+  console.log selected # index of the array
+</code></pre>
+
+<p><strong>undo()</strong></p>
+
+<p>Undo the last action.</p>
+
+<pre lang="node"><code>z.window.active().then (window) -&gt;
+  window.maximise()
+  z.util.undo()
+  z.util.redo()
+</code></pre>
+
+<p><strong>redo()</strong></p>
+
+<p>Redo the last action.</p>
+
+<pre lang="node"><code>z.window.active().then (window) -&gt;
+  window.maximise()
+  z.util.undo()
+  z.util.redo()
 </code></pre>
 
 <h2>
@@ -398,15 +455,27 @@ Choose a list of items from a dinamically populated popup.</p>
 <p>Tests are written in <a href="http://visionmedia.github.io/mocha/">Mocha</a>. Simply run
 the test with:</p>
 
-<pre><code>~$ mocha
+<pre><code>~$ npm test
 </code></pre>
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/danielepolencic">danielepolencic</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/stayradiated/okeanos/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/stayradiated/okeanos/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/stayradiated/okeanos"></a> is maintained by <a href="https://github.com/stayradiated">stayradiated</a>.</p>
+
+          <p>This page was generated by <a href="pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
     </div>
-    <script src="javascripts/scale.fix.js"></script>
-    
+
+  
   </body>
 </html>
