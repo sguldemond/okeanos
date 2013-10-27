@@ -4,7 +4,7 @@
   "author": "George Czabania <george@czabania.com>",
   "main": "index.coffee",
   "scripts": {
-    "test": "mocha --compilers coffee:coffee-script tests"
+    "test": "mocha --compilers coffee:coffee-script test"
   },
   "dependencies": {
     "coffee-script": "~1.6.3",

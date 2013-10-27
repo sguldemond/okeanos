@@ -31,8 +31,10 @@ describe 'Client', ->
 
     client = new Client options
 
+    server.replyWith [['-1', 'null', 'null']]
+
     i = 0
-    server.replyWith ['-1', 'null', 'null']
+
     client.listen(0, 2, 'another_command').then undefined, undefined, ->
       i += 1
       if i > 1
@@ -45,7 +47,7 @@ describe 'Client', ->
 
     i = 0
 
-    server.replyWith ['-1', 'null', 'null', 'null', 'null']
+    server.replyWith [['-1', 'null', 'null', 'null', 'null']]
 
     client.listen(3, 0, 'random').then( ->
       assert.equal i, 2

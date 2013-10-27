@@ -18,15 +18,16 @@ describe 'Zephyros', ->
 
   it 'should bind a key shortcut twice', (done) ->
     z = new Zephyros options
-    server.replyWith ['-1', 'null']
+
+    server.replyWith [['-1', 'null']]
+
     z.bind('t', ['Cmd', 'Shift']).then ->
       done()
 
   it 'should bind to a key shortcut and execute calls outside of bind', (done) ->
     z = new Zephyros options
 
-    server.replyWith ['-1', 'null']
-    server.replyWith 'clip'
+    server.replyWith [['-1', 'null'], 'clip']
 
     z.bind('r', ['Cmd', 'Shift']).then ->
 
@@ -37,7 +38,8 @@ describe 'Zephyros', ->
   it 'should listen for two events', (done) ->
     z = new Zephyros options
 
-    server.replyWith ['-1', '77']
+    server.replyWith [['-1', '77']]
+
     z.listen('window_created')
       .then (window) ->
         assert.equal window, 77

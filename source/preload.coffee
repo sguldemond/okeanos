@@ -1,6 +1,8 @@
 When = require 'when'
 
 preload = (attrs=[], models=[]) ->
+  if attrs.length is 0 then return models
+
   attrs = if Array.isArray attrs then attrs else [attrs]
   models = if Array.isArray models then models else [models]
   promises = []
@@ -13,6 +15,6 @@ preload = (attrs=[], models=[]) ->
     if models.length is 1 then models[0] else models
 
 preload.extend = (attrs...) ->
-  preload(attrs, this)
+  preload attrs, this
 
 module.exports = preload

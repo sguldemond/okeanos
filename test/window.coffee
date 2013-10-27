@@ -30,7 +30,8 @@ describe 'Window', ->
 
     z = new Zephyros options
 
-    server.replyWith [[[1, 2, 3, 4]]]
+    # [ container [ replies [ arguments [ content ]]]]
+    server.replyWith [[[ [1, 2, 3, 4] ]]]
 
     z.window.all().then (windows) ->
       assert.equal windows.length, 4
@@ -51,17 +52,16 @@ describe 'Window', ->
         assert.equal title, 'Window title'
         done()
 
-  it 'should load multiple parameters', (done) ->
+  it 'should preload load multiple parameters', (done) ->
 
     z = new Zephyros options
 
-    server.replyWith '1'
+    server.replyWith [1, 'Title', no]
+
     z.window.active().then (win) ->
       assert.equal win.id, 1
 
-      server.replyWith 'Title'
-      server.replyWith no
-
-      win.do('getTitle', 'isNormal').then (win) ->
-        console.log win
+      win.preload('title', 'normal').then (win) ->
+        assert.equal win.title, 'Title'
+        assert.equal win.normal, no
         done()
