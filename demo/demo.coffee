@@ -4,43 +4,108 @@ $ = new Okeanos
 
 # settings
 
-s_width = 1920
-gap = 30
+gap = 25
+config = x: 2, y: 2
+gridCache = {}
 
-managed = []
+makeGrid = (length, offset, x, grid_a, grid_b) ->
+
+  points = []
+
+  size = length / x
+  for i in [0..x]
+    p = i * size
+
+    if p is 0
+      grid_a.push gap + offset
+
+    else if p is length
+      grid_b.push length - gap + offset
+
+    else
+      grid_a.push p + gap / 2 + offset
+      grid_b.push p - gap / 2 + offset
+
+findClosestPoint = (num, array) ->
+  closest = null
+  min = Infinity
+  for i in array
+    diff = Math.abs i - num
+    if diff < min
+      min = diff
+      closest = i
+  return closest
+
+snapToGrid = (frame, grid) ->
+  out = {}
+
+  out.y = findClosestPoint frame.y, grid.north
+  out.h = findClosestPoint frame.h + frame.y, grid.south
+  out.h -= out.y
+
+  out.x = findClosestPoint frame.x, grid.west
+  out.w = findClosestPoint frame.w + frame.x, grid.east
+  out.w -= out.x
+
+  return out
+
+
+getGrid = (screen) ->
+
+  if gridCache[screen.id]?
+    return then: (fn) -> fn gridCache[screen.id]
+
+  screen.getFrame().then (frame) ->
+
+    grid = gridCache[screen.id] =
+      north: []
+      south: []
+      east: []
+      west: []
+
+    makeGrid frame.w, frame.x, config.x, grid.west, grid.east
+    makeGrid frame.h, frame.y, config.y, grid.north, grid.south
+
+    return grid
+
+
+shiftGridSnap = (diff, direction) ->
+
+  $.window.active('frame', 'screen', 'otherWindows').then (win) ->
+
+    if diff is 'reset'
+      delete gridCache[win.screen.id]
+
+    getGrid(win.screen).then (grid) ->
+
+      if typeof diff is 'number' and diff isnt 0
+        switch direction
+          when 'x'
+            moveGrid diff, grid.west, grid.east
+          when 'y'
+            moveGrid diff, grid.north, grid.south
+
+      win.otherWindows.forEach (window) ->
+        window.getFrame().then (frame) ->
+          window.setFrame snapToGrid frame, grid
+
+      win.setFrame snapToGrid win.frame, grid
+
+
+# Move the points in a grid
+moveGrid = (diff, grid_a, grid_b) ->
+  # assuming grid_a.length is grid_b.length
+  for i in [0...grid_a.length]
+    if i isnt 0
+      grid_a[i] += diff
+    if i isnt grid_a.length - 1
+      grid_b[i] += diff
 
 # mixins
-
-setWindows = ->
-  managed = []
-  $.window.active('otherWindows').then (win) ->
-    managed.push win.id
-    managed.push window.id for window in win.otherWindows
 
 focus = (direction) ->
   $.window.active().then (win) ->
     win.focusTo direction
-
-resize = (x, y) ->
-  $.window.active().then (win) ->
-
-    if x < 0
-      win.move x, y, -x, y
-      win.getWindowsTo('west').then (windows) ->
-        for window in windows when window.id in managed
-          window.resize x, y
-
-    else if x > 0
-      win.resize x, y
-      win.getWindowsTo('east').then (windows) ->
-        for window in windows when window.id in managed
-          window.move x, y, -x, y
-
-
-
-# resize = (w, h) ->
-#   $.window.active().then (win) ->
-#     win.resize w, h
 
 snap = (direction) ->
   $.window.active('frame', 'screen').then (win) ->
@@ -84,15 +149,10 @@ $.bind('h', ['Cmd']).then -> focus 'left'
 $.bind('j', ['Cmd']).then -> focus 'down'
 $.bind('k', ['Cmd']).then -> focus 'up'
 
-$.bind('h', ['Cmd', 'Shift']).then -> resize -x, 0
-$.bind('l', ['Cmd', 'Shift']).then -> resize x, 0
-$.bind('j', ['Cmd', 'Shift']).then -> resize 0, x
-$.bind('k', ['Cmd', 'Shift']).then -> resize 0, -x
-
-# $.bind('[', ['Cmd', 'Shift']).then -> resize -x, 0
-# $.bind(']', ['Cmd', 'Shift']).then -> resize x, 0
-# $.bind('-', ['Cmd', 'Shift']).then -> resize 0, -x
-# $.bind('=', ['Cmd', 'Shift']).then -> resize 0, x
+$.bind('h', ['Cmd', 'Shift']).then -> shiftGridSnap -x, 'x'
+$.bind('l', ['Cmd', 'Shift']).then -> shiftGridSnap  x, 'x'
+$.bind('j', ['Cmd', 'Shift']).then -> shiftGridSnap -x, 'y'
+$.bind('k', ['Cmd', 'Shift']).then -> shiftGridSnap  x, 'y'
 
 $.bind('h', ['Cmd', 'Ctrl']).then -> snap 'left'
 $.bind('l', ['Cmd', 'Ctrl']).then -> snap 'right'
@@ -100,4 +160,5 @@ $.bind('j', ['Cmd', 'Ctrl']).then -> snap 'down'
 $.bind('k', ['Cmd', 'Ctrl']).then -> snap 'up'
 $.bind('n', ['Cmd', 'Ctrl']).then -> snap 'fill'
 
-$.bind('m', ['Cmd', 'Ctrl']).then -> setWindows()
+$.bind('m', ['Cmd', 'Shift']).then -> shiftGridSnap()
+$.bind('e', ['Cmd', 'Shift']).then -> shiftGridSnap 'reset'
