@@ -6,6 +6,8 @@ class Screen
   _index:
     frame: 'getFrame'
     fullFrame: 'getFullFrame'
+    nextScreen: 'next'
+    prevScreen: 'prev'
 
   constructor: (@id) ->
     @client = wrap @id
@@ -17,10 +19,12 @@ class Screen
     @client('frame_including_dock_and_menu').then (@fullFrame) => @fullFrame
 
   previous: =>
-    @client('previous_screen').then (id) -> new Screen(id)
+    @client('previous_screen').then (id) =>
+      @prevScreen = new Screen(id)
 
   next: =>
-    @client('next_screen').then (id) -> new Screen(id)
+    @client('next_screen').then (id) =>
+      @nextScreen = new Screen(id)
 
   rotate: (degree) =>
     # return unless degree in [0, 90, 180, 270]
