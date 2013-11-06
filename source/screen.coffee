@@ -47,4 +47,7 @@ Api =
     client('all_screens').then (screens) ->
       preload attrs, screens.map (id) -> new Screen(id)
 
+  get: (id, attrs...) ->
+    preload attrs, new Screen(id)
+
 module.exports = Api

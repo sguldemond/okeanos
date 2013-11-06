@@ -49,8 +49,11 @@ Api =
 
   _model: App
 
-  all: (attrs) ->
+  all: (attrs...) ->
     client('running_apps').then (apps) ->
       preload attrs, apps.map (id) -> new App(id)
+
+  get: (id, attrs...) ->
+    preload attrs, new App(id)
 
 module.exports = Api

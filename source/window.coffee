@@ -133,4 +133,7 @@ Api =
     client('all_windows').then (windows) ->
       preload attrs, windows.map (id) -> new Window(id)
 
+  get: (id, attrs...) ->
+    preload attrs, new Window(id)
+
 module.exports = Api
