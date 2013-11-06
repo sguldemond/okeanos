@@ -16,12 +16,13 @@ Cmd + Ctrl + hjkl
 ## Change Grid Size
 
 **Horizontal**
-Cmd + Ctrl + Shift + Alt + z
-Cmd + Ctrl + Shift + Alt + x
+- Cmd + Ctrl + Shift + Alt + z
+- Cmd + Ctrl + Shift + Alt + x
 
 **Verticle**
-Cmd + Ctrl + Shift + Alt + a
-Cmd + Ctrl + Shift + Alt + r
+
+- Cmd + Ctrl + Shift + Alt + a
+- Cmd + Ctrl + Shift + Alt + r
 
 ## Change Padding
 
@@ -30,9 +31,12 @@ Cmd + Ctrl + Shift + Alt + =
 
 ## Maximize
 
+Cmd + Alt + n
+
 ## Minimize to Dock
+
+Cmd + Alt + o
 
 ## Switch Screen
 
-## Snap to Side
-
+Cmd + Shift + e

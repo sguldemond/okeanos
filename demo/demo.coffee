@@ -164,6 +164,20 @@ focus = (direction) ->
   $.window.active().then (win) ->
     win.focusTo direction
 
+
+###
+  Minimize the current window
+###
+minimize = ->
+  $.window.active().then (win) ->
+    win.minimize()
+
+
+###
+  Snap a window into a position on the screen.
+  Does not use the grid.
+  - direction (string) : the direction you want to snap
+###
 snap = (direction) ->
   $.window.active('frame', 'screen').then (win) ->
     win.screen.getFullFrame().then (screen) ->
@@ -217,7 +231,9 @@ $.bind('h', ['Cmd', 'Ctrl']).then -> moveWindow 'push left'
 $.bind('l', ['Cmd', 'Ctrl']).then -> moveWindow 'push right'
 $.bind('j', ['Cmd', 'Ctrl']).then -> moveWindow 'push down'
 $.bind('k', ['Cmd', 'Ctrl']).then -> moveWindow 'push up'
-$.bind('n', ['Cmd', 'Ctrl']).then -> snap 'fill'
+
+$.bind('n', ['Cmd', 'Alt']).then -> snap 'fill'
+$.bind('o', ['Cmd', 'Alt']).then -> minimize()
 
 $.bind('m', ['Cmd', 'Shift']).then -> snapAllWindowsToGrid()
 $.bind('e', ['Cmd', 'Shift']).then -> switchScreen()
