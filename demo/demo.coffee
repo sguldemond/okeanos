@@ -1,31 +1,55 @@
+fs = require 'fs'
+net = require 'net'
 Okeanos = require '../'
 
 $ = new Okeanos
 
-# settings
+# SETTINGS
 
+# Padding around the window edges
 gap = 25
-config = x: 2, y: 2
+
+# Grid settings
+config = x: 10, y: 4
 gridCache = {}
 
-makeGrid = (length, offset, x, grid_a, grid_b) ->
 
+###
+  Make a grid between two points
+  - position (int) : the offset point of the grid, e.g. 0
+  - length (int) : the number of pixels in the grid e.g. 1920
+  - sections (int) : the number of sections to have
+  > returns an object with two arrays
+###
+createGrid = (offset, length, sections) ->
+
+  a = []
+  b = []
   points = []
 
-  size = length / x
-  for i in [0..x]
+  size = length / sections
+
+  for i in [0..sections]
     p = i * size
 
     if p is 0
-      grid_a.push gap + offset
+      a.push gap + offset
 
     else if p is length
-      grid_b.push length - gap + offset
+      b.push length - gap + offset
 
     else
-      grid_a.push p + gap / 2 + offset
-      grid_b.push p - gap / 2 + offset
+      a.push p + gap / 2 + offset
+      b.push p - gap / 2 + offset
 
+  return [a, b, size]
+
+###
+  Find the closest value in an array
+  - num (int) - the number to match
+  - array (int[]) - the numbers to choose from
+  > returns the chosen number
+###
 findClosestPoint = (num, array) ->
   closest = null
   min = Infinity
@@ -36,80 +60,113 @@ findClosestPoint = (num, array) ->
       closest = i
   return closest
 
-snapToGrid = (frame, grid) ->
+
+###
+  Snap a window frame to a grid
+  - frame (object) : the window frame
+  - grid (object) : the grid
+  > returns a new window frame that fits on the grid
+###
+snapFrameToGrid = (frame, grid) ->
   out = {}
-
-  out.y = findClosestPoint frame.y, grid.north
-  out.h = findClosestPoint frame.h + frame.y, grid.south
-  out.h -= out.y
-
-  out.x = findClosestPoint frame.x, grid.west
-  out.w = findClosestPoint frame.w + frame.x, grid.east
-  out.w -= out.x
-
+  out.y = findClosestPoint(frame.y, grid.north)
+  out.h = findClosestPoint(frame.h + frame.y, grid.south) - out.y
+  out.x = findClosestPoint(frame.x, grid.west)
+  out.w = findClosestPoint(frame.w + frame.x, grid.east) - out.x
   return out
 
 
+###
+  Generate a grid for a screen
+  - screen (Screen) : the screen
+  > returns the grid screen grid
+###
 getGrid = (screen) ->
 
   if gridCache[screen.id]?
     return then: (fn) -> fn gridCache[screen.id]
 
-  screen.getFrame().then (frame) ->
-
-    grid = gridCache[screen.id] =
-      north: []
-      south: []
-      east: []
-      west: []
-
-    makeGrid frame.w, frame.x, config.x, grid.west, grid.east
-    makeGrid frame.h, frame.y, config.y, grid.north, grid.south
-
+  screen.getFullFrame().then (frame) ->
+    grid = gridCache[screen.id] = {}
+    [grid.west,  grid.east,  grid.x] = createGrid frame.x, frame.w, config.x
+    [grid.north, grid.south, grid.y] = createGrid frame.y, frame.h, config.y
     return grid
 
 
-shiftGridSnap = (diff, direction) ->
+###
+  Snap all windows to the grid.
+  Only alters windows on the current screen.
+###
+snapAllWindowsToGrid = ->
 
+  # Get information about the current window
   $.window.active('frame', 'screen', 'otherWindows').then (win) ->
 
-    if diff is 'reset'
-      delete gridCache[win.screen.id]
+    # Get the grid for the current screen
+    getGrid(win.screen).then (grid) ->
+
+      # Snap the current window to the grid
+      win.setFrame snapFrameToGrid win.frame, grid
+
+      # Snap all the other windows to the grid
+      win.otherWindows.forEach (window) ->
+        window.getFrame().then (frame) ->
+          window.setFrame snapFrameToGrid frame, grid
+
+
+###
+  Move a window in a direction on the grid
+  - direction (string) : 'left', 'right', 'up', 'down'
+###
+moveWindow = (direction) ->
+
+  $.window.active('frame', 'screen').then (win) ->
 
     getGrid(win.screen).then (grid) ->
 
-      if typeof diff is 'number' and diff isnt 0
-        switch direction
-          when 'x'
-            moveGrid diff, grid.west, grid.east
-          when 'y'
-            moveGrid diff, grid.north, grid.south
+      switch direction
 
-      win.otherWindows.forEach (window) ->
-        window.getFrame().then (frame) ->
-          window.setFrame snapToGrid frame, grid
+        when 'move left'
+          win.frame.x -= grid.x
+        when 'move right'
+          win.frame.x += grid.x
+        when 'move down'
+          win.frame.y += grid.y
+        when 'move up'
+          win.frame.y -= grid.y
 
-      win.setFrame snapToGrid win.frame, grid
+        when 'push left'
+          win.frame.w -= grid.x
+        when 'push right'
+          win.frame.w += grid.x
+        when 'push down'
+          win.frame.h += grid.x
+        when 'push up'
+          win.frame.h -= grid.x
 
+      win.setFrame snapFrameToGrid win.frame, grid
 
-# Move the points in a grid
-moveGrid = (diff, grid_a, grid_b) ->
-  # assuming grid_a.length is grid_b.length
-  for i in [0...grid_a.length]
-    if i isnt 0
-      grid_a[i] += diff
-    if i isnt grid_a.length - 1
-      grid_b[i] += diff
+###
+  Switch the screen that the window is on
+###
+switchScreen = ->
+  $.window.active('screen').then (win) ->
+    win.screen.preload('fullFrame', 'nextScreen').then (screen) ->
+      screen.nextScreen.getFullFrame().then (nextFrame) ->
+        diff = nextFrame.x - screen.fullFrame.x
+        win.nudge diff, 0
 
-# mixins
-
+###
+  Move focus to another window
+  - direction (string) : The direction to focus to
+###
 focus = (direction) ->
   $.window.active().then (win) ->
     win.focusTo direction
 
 snap = (direction) ->
   $.window.active('frame', 'screen').then (win) ->
-    win.screen.getFrame().then (screen) ->
+    win.screen.getFullFrame().then (screen) ->
 
       frame =
         x: screen.x + gap
@@ -140,7 +197,9 @@ snap = (direction) ->
 
       win.setFrame frame
 
-# bindings
+###
+  BINDINGS
+###
 
 x = 100
 
@@ -149,16 +208,18 @@ $.bind('h', ['Cmd']).then -> focus 'left'
 $.bind('j', ['Cmd']).then -> focus 'down'
 $.bind('k', ['Cmd']).then -> focus 'up'
 
-$.bind('h', ['Cmd', 'Shift']).then -> shiftGridSnap -x, 'x'
-$.bind('l', ['Cmd', 'Shift']).then -> shiftGridSnap  x, 'x'
-$.bind('j', ['Cmd', 'Shift']).then -> shiftGridSnap -x, 'y'
-$.bind('k', ['Cmd', 'Shift']).then -> shiftGridSnap  x, 'y'
+$.bind('h', ['Cmd', 'Shift']).then -> moveWindow 'move left'
+$.bind('l', ['Cmd', 'Shift']).then -> moveWindow 'move right'
+$.bind('j', ['Cmd', 'Shift']).then -> moveWindow 'move down'
+$.bind('k', ['Cmd', 'Shift']).then -> moveWindow 'move up'
 
-$.bind('h', ['Cmd', 'Ctrl']).then -> snap 'left'
-$.bind('l', ['Cmd', 'Ctrl']).then -> snap 'right'
-$.bind('j', ['Cmd', 'Ctrl']).then -> snap 'down'
-$.bind('k', ['Cmd', 'Ctrl']).then -> snap 'up'
+$.bind('h', ['Cmd', 'Ctrl']).then -> moveWindow 'push left'
+$.bind('l', ['Cmd', 'Ctrl']).then -> moveWindow 'push right'
+$.bind('j', ['Cmd', 'Ctrl']).then -> moveWindow 'push down'
+$.bind('k', ['Cmd', 'Ctrl']).then -> moveWindow 'push up'
 $.bind('n', ['Cmd', 'Ctrl']).then -> snap 'fill'
 
-$.bind('m', ['Cmd', 'Shift']).then -> shiftGridSnap()
-$.bind('e', ['Cmd', 'Shift']).then -> shiftGridSnap 'reset'
+$.bind('m', ['Cmd', 'Shift']).then -> snapAllWindowsToGrid()
+$.bind('e', ['Cmd', 'Shift']).then -> switchScreen()
+
+
