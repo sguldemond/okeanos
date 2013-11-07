@@ -7,7 +7,7 @@ Api =
   log: (message) ->
     client 'log', message
 
-  alert: (message, duration) ->
+  alert: (message, duration=1) ->
     client 'alert', message, duration
 
   showBox: (message) ->

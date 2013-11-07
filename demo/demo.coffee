@@ -238,4 +238,36 @@ $.bind('o', ['Cmd', 'Alt']).then -> minimize()
 $.bind('m', ['Cmd', 'Shift']).then -> snapAllWindowsToGrid()
 $.bind('e', ['Cmd', 'Shift']).then -> switchScreen()
 
+$.bind('=', ['Cmd', 'Shift', 'Ctrl', 'Alt']).then ->
+  gap += 5
+  gridCache = {}
+  snapAllWindowsToGrid()
 
+$.bind('-', ['Cmd', 'Shift', 'Ctrl', 'Alt']).then ->
+  gap -= 5
+  gridCache = {}
+  snapAllWindowsToGrid()
+
+$.bind('z', ['Cmd', 'Shift', 'Ctrl', 'Alt']).then ->
+  config.x -= 1
+  $.util.alert JSON.stringify config
+  gridCache = {}
+  snapAllWindowsToGrid() snapAllWindowsToGrid()
+
+$.bind('x', ['Cmd', 'Shift', 'Ctrl', 'Alt']).then ->
+  config.x += 1
+  $.util.alert JSON.stringify config
+  gridCache = {}
+  snapAllWindowsToGrid() snapAllWindowsToGrid()
+
+$.bind('a', ['Cmd', 'Shift', 'Ctrl', 'Alt']).then ->
+  config.y -= 1
+  $.util.alert JSON.stringify config
+  gridCache = {}
+  snapAllWindowsToGrid() snapAllWindowsToGrid()
+
+$.bind('r', ['Cmd', 'Shift', 'Ctrl', 'Alt']).then ->
+  config.y += 1
+  $.util.alert JSON.stringify config
+  gridCache = {}
+  snapAllWindowsToGrid() snapAllWindowsToGrid()
