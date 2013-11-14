@@ -1,8 +1,17 @@
 fs = require 'fs'
 net = require 'net'
 Okeanos = require '../'
+{exec} = require 'child_process'
 
 $ = new Okeanos
+
+updateTitle = ->
+  $.window.active('title').then (win) ->
+    exec "echo \"T#{ win.title }\" > /tmp/bar.fifo"
+
+$.listen('focus_changed').then -> updateTitle()
+
+setInterval updateTitle, 5000
 
 # SETTINGS
 
@@ -86,7 +95,7 @@ getGrid = (screen) ->
   if gridCache[screen.id]?
     return then: (fn) -> fn gridCache[screen.id]
 
-  screen.getFullFrame().then (frame) ->
+  screen.getFrame().then (frame) ->
     grid = gridCache[screen.id] = {}
     [grid.west,  grid.east,  grid.x] = createGrid frame.x, frame.w, config.x
     [grid.north, grid.south, grid.y] = createGrid frame.y, frame.h, config.y
@@ -111,6 +120,7 @@ snapAllWindowsToGrid = ->
       # Snap all the other windows to the grid
       win.otherWindows.forEach (window) ->
         window.getFrame().then (frame) ->
+          return unless frame.h > 26
           window.setFrame snapFrameToGrid frame, grid
 
 
@@ -121,6 +131,8 @@ snapAllWindowsToGrid = ->
 moveWindow = (direction) ->
 
   $.window.active('frame', 'screen').then (win) ->
+
+    return unless win.frame.h > 26
 
     getGrid(win.screen).then (grid) ->
 
@@ -180,7 +192,7 @@ minimize = ->
 ###
 snap = (direction) ->
   $.window.active('frame', 'screen').then (win) ->
-    win.screen.getFullFrame().then (screen) ->
+    win.screen.getFrame().then (screen) ->
 
       frame =
         x: screen.x + gap
