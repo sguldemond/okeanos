@@ -11,8 +11,6 @@ updateTitle = ->
 
 $.listen('focus_changed').then -> updateTitle()
 
-setInterval updateTitle, 5000
-
 # SETTINGS
 
 # Padding around the window edges
@@ -251,12 +249,12 @@ $.bind('m', ['Cmd', 'Shift']).then -> snapAllWindowsToGrid()
 $.bind('e', ['Cmd', 'Shift']).then -> switchScreen()
 
 $.bind('=', ['Cmd', 'Shift', 'Ctrl', 'Alt']).then ->
-  gap += 5
+  gap -= 5
   gridCache = {}
   snapAllWindowsToGrid()
 
 $.bind('-', ['Cmd', 'Shift', 'Ctrl', 'Alt']).then ->
-  gap -= 5
+  gap += 5
   gridCache = {}
   snapAllWindowsToGrid()
 
