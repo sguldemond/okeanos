@@ -9,7 +9,7 @@ updateTitle = ->
   $.window.active('title').then (win) ->
     exec "echo \"T#{ win.title }\" > /tmp/bar.fifo"
 
-$.listen('focus_changed').then -> updateTitle()
+# $.listen('focus_changed').then -> updateTitle()
 
 # SETTINGS
 
