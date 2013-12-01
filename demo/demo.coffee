@@ -9,8 +9,6 @@ updateTitle = ->
   $.window.active('title').then (win) ->
     exec "echo \"T#{ win.title }\" > /tmp/bar.fifo"
 
-# $.listen('focus_changed').then -> updateTitle()
-
 # SETTINGS
 
 # Padding around the window edges
@@ -281,3 +279,6 @@ $.bind('r', ['Cmd', 'Shift', 'Ctrl', 'Alt']).then ->
   $.util.alert JSON.stringify config
   gridCache = {}
   snapAllWindowsToGrid() snapAllWindowsToGrid()
+
+$.bind('f', ['Cmd', 'Shift', 'Ctrl', 'Alt']).then ->
+  $.listen('focus_changed').then -> updateTitle()
