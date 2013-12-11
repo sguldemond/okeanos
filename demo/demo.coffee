@@ -225,26 +225,26 @@ snap = (direction) ->
 
 x = 100
 
-$.bind('l', ['Ctrl']).then -> focus 'right'
-$.bind('h', ['Ctrl']).then -> focus 'left'
-$.bind('j', ['Ctrl']).then -> focus 'down'
-$.bind('k', ['Ctrl']).then -> focus 'up'
+$.bind('l', ['Cmd']).then -> focus 'right'
+$.bind('h', ['Cmd']).then -> focus 'left'
+$.bind('j', ['Cmd']).then -> focus 'down'
+$.bind('k', ['Cmd']).then -> focus 'up'
 
-$.bind('h', ['Ctrl', 'Cmd']).then -> moveWindow 'move left'
-$.bind('l', ['Ctrl', 'Cmd']).then -> moveWindow 'move right'
-$.bind('j', ['Ctrl', 'Cmd']).then -> moveWindow 'move down'
-$.bind('k', ['Ctrl', 'Cmd']).then -> moveWindow 'move up'
+$.bind('h', ['Cmd', 'Shift']).then -> moveWindow 'move left'
+$.bind('l', ['Cmd', 'Shift']).then -> moveWindow 'move right'
+$.bind('j', ['Cmd', 'Shift']).then -> moveWindow 'move down'
+$.bind('k', ['Cmd', 'Shift']).then -> moveWindow 'move up'
 
-$.bind('h', ['Ctrl', 'Cmd', 'Shift']).then -> moveWindow 'push left'
-$.bind('l', ['Ctrl', 'Cmd', 'Shift']).then -> moveWindow 'push right'
-$.bind('j', ['Ctrl', 'Cmd', 'Shift']).then -> moveWindow 'push down'
-$.bind('k', ['Ctrl', 'Cmd', 'Shift']).then -> moveWindow 'push up'
+$.bind('h', ['Cmd', 'Ctrl']).then -> moveWindow 'push left'
+$.bind('l', ['Cmd', 'Ctrl']).then -> moveWindow 'push right'
+$.bind('j', ['Cmd', 'Ctrl']).then -> moveWindow 'push down'
+$.bind('k', ['Cmd', 'Ctrl']).then -> moveWindow 'push up'
 
-$.bind('n', ['Ctrl', 'Cmd']).then -> snap 'fill'
-$.bind('o', ['Ctrl', 'Cmd']).then -> minimize()
+$.bind('n', ['Cmd', 'Shift']).then -> snap 'fill'
+$.bind('o', ['Cmd', 'Shift']).then -> minimize()
 
-$.bind('m', ['Ctrl', 'Cmd']).then -> snapAllWindowsToGrid()
-$.bind('e', ['Ctrl', 'Cmd']).then -> switchScreen()
+$.bind('m', ['Cmd', 'Shift']).then -> snapAllWindowsToGrid()
+$.bind('e', ['Cmd', 'Shift']).then -> switchScreen()
 
 $.bind('=', ['Cmd', 'Shift', 'Ctrl', 'Alt']).then ->
   gap -= 5
