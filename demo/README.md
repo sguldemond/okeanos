@@ -1,5 +1,6 @@
-
 # Okeanos Sample Config
+
+This is my personal configuration that uses a flexible grid to arrange windows.
 
 ## Snap all windows to grid
 
@@ -14,6 +15,8 @@ Cmd + Shift + hjkl
 Cmd + Ctrl + hjkl
 
 ## Change Grid Size
+
+*I remapped the right control key to Cmd + Ctrl + Shift + Alt so this is easier to press than it looks.*
 
 **Horizontal**
 - Cmd + Ctrl + Shift + Alt + z
