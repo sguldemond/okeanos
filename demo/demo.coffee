@@ -240,8 +240,8 @@ $.bind('l', ['Cmd', 'Ctrl']).then -> moveWindow 'push right'
 $.bind('j', ['Cmd', 'Ctrl']).then -> moveWindow 'push down'
 $.bind('k', ['Cmd', 'Ctrl']).then -> moveWindow 'push up'
 
-$.bind('n', ['Cmd', 'Shift']).then -> snap 'fill'
-$.bind('o', ['Cmd', 'Shift']).then -> minimize()
+$.bind('n', ['Cmd', 'Alt']).then -> snap 'fill'
+$.bind('o', ['Cmd', 'Alt']).then -> minimize()
 
 $.bind('m', ['Cmd', 'Shift']).then -> snapAllWindowsToGrid()
 $.bind('e', ['Cmd', 'Shift']).then -> switchScreen()

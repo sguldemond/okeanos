@@ -24,7 +24,6 @@ class Window
   getTitle: =>
     @client('title').then (@title) => @title
 
-
   getScreen: =>
     @client('screen').then (id) =>
       @screen = new Screen(id)
