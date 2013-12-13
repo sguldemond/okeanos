@@ -19,6 +19,36 @@ config = x: 10, y: 4
 gridCache = {}
 
 
+settings =
+  load: ->
+
+    try
+      data = fs.readFileSync __dirname + '/settings.json'
+    catch e
+      console.log e
+
+    if data
+      data = JSON.parse data
+      config.x = data.x
+      config.y = data.y
+      gap = data.gap
+
+  timeout: null
+
+  save: ->
+    if settings.timeout
+      clearTimeout settings.timeout
+    settings.timeout = setTimeout settings._save, 5 * 1000
+
+  _save: ->
+    data =
+      gap: gap
+      x: config.x
+      y: config.y
+    fs.writeFile __dirname + '/settings.json', JSON.stringify(data, null, 2)
+
+settings.load()
+
 ###
   Make a grid between two points
   - position (int) : the offset point of the grid, e.g. 0
@@ -248,34 +278,40 @@ $.bind('e', ['Cmd', 'Shift']).then -> switchScreen()
 
 $.bind('=', ['Cmd', 'Shift', 'Ctrl', 'Alt']).then ->
   gap -= 5
+  settings.save()
   gridCache = {}
   snapAllWindowsToGrid()
 
 $.bind('-', ['Cmd', 'Shift', 'Ctrl', 'Alt']).then ->
   gap += 5
+  settings.save()
   gridCache = {}
   snapAllWindowsToGrid()
 
 $.bind('z', ['Cmd', 'Shift', 'Ctrl', 'Alt']).then ->
   config.x -= 1
+  settings.save()
   $.util.alert JSON.stringify config
   gridCache = {}
   snapAllWindowsToGrid() snapAllWindowsToGrid()
 
 $.bind('x', ['Cmd', 'Shift', 'Ctrl', 'Alt']).then ->
   config.x += 1
+  settings.save()
   $.util.alert JSON.stringify config
   gridCache = {}
   snapAllWindowsToGrid() snapAllWindowsToGrid()
 
 $.bind('a', ['Cmd', 'Shift', 'Ctrl', 'Alt']).then ->
   config.y -= 1
+  settings.save()
   $.util.alert JSON.stringify config
   gridCache = {}
   snapAllWindowsToGrid() snapAllWindowsToGrid()
 
 $.bind('r', ['Cmd', 'Shift', 'Ctrl', 'Alt']).then ->
   config.y += 1
+  settings.save()
   $.util.alert JSON.stringify config
   gridCache = {}
   snapAllWindowsToGrid() snapAllWindowsToGrid()
