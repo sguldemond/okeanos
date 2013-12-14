@@ -3,6 +3,8 @@ Node.js adapter for [Zephyros](https://github.com/sdegutis/zephyros) - the OS X 
 
 This is a fork of [`node-zephyros`](https://github.com/danielepolencic/node-zephyros) by [danielepolencic](https://github.com/danielepolencic). The main difference is that this uses a class based API where the original used a chaining system. Okeanos gives you a lot of control over objects.
 
+Video: http://www.youtube.com/watch?v=10Zwc6r5sLs
+
 ## Usage
 Include `okeanos` in your script and you're ready to go!
 
