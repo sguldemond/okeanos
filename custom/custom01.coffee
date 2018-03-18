@@ -14,10 +14,17 @@ updateTitle = ->
 # Padding around the window edges
 gap = 25
 
+# Height of the top bar
+top_bar = 20
+
+divide = 0
+
 # Grid settings
 config = x: 10, y: 4
 gridCache = {}
 
+$.window.active('screen').then (win) ->
+  divide = screen.x / 2
 
 settings =
   load: ->
@@ -32,6 +39,7 @@ settings =
       config.x = data.x
       config.y = data.y
       gap = data.gap
+      # top_bar = data.top_bar
 
   timeout: null
 
@@ -124,7 +132,7 @@ getGrid = (screen) ->
   screen.getFrame().then (frame) ->
     grid = gridCache[screen.id] = {}
     [grid.west,  grid.east,  grid.x] = createGrid frame.x, frame.w, config.x
-    [grid.north, grid.south, grid.y] = createGrid frame.y + 20, frame.h - 20, config.y
+    [grid.north, grid.south, grid.y] = createGrid frame.y + top_bar, frame.h - top_bar, config.y
     return grid
 
 
@@ -222,9 +230,9 @@ snap = (direction) ->
 
       frame =
         x: screen.x + gap
-        y: screen.y + gap + 20
+        y: screen.y + gap + top_bar
         w: screen.w - (gap * 2)
-        h: screen.h - (gap * 2) - 20
+        h: screen.h - (gap * 2) - top_bar
 
       switch direction
 
