@@ -8,8 +8,8 @@
   },
   "dependencies": {
     "coffee-script": "~1.6.3",
-    "when" : "2.3.0",
-    "node-uuid" : "1.4.0"
+    "when": "2.3.0",
+    "node-uuid": "1.4.0"
   },
   "devDependencies": {
     "mocha": "1.12.0"
