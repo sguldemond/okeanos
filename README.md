@@ -1,9 +1,8 @@
 # Okeanos
 Node.js adapter for [Zephyros](https://github.com/sdegutis/zephyros) - the OS X window manager for hackers.
 
-This is a fork of [`node-zephyros`](https://github.com/danielepolencic/node-zephyros) by [danielepolencic](https://github.com/danielepolencic). The main difference is that this uses a class based API where the original used a chaining system. Okeanos gives you a lot of control over objects.
+This is a fork of [`okeanos`](https://github.com/stayradiated/okeanos) by [stayradiated](https://github.com/danielepolencic). I changed around the behavior of the controls and some binds. Also changed some moving behavior since I'm using the Ubersicht nerdbar widget.
 
-Video: http://www.youtube.com/watch?v=10Zwc6r5sLs
 
 ## Usage
 Include `okeanos` in your script and you're ready to go!
